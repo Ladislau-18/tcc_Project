@@ -1,0 +1,96 @@
+import React, { useState } from "react";
+import axios from 'axios';
+import { useNavigate, Link } from "react-router-dom";
+
+const Register = () => {
+    const [nome, setNome] = useState('');
+    const [numProcesso, setNumProcesso] = useState('');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [tipoAcesso, setTipoUsuario] = useState('');
+
+    const navigate = useNavigate();
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+
+        try {
+            // 2. ADICIONAR O 'CARGO' NO OBJETO ENVIADO PARA O PHP
+            const response = await axios.post('http://localhost/TCC_PROJETO/tcc_back/register.php', {
+                nome,
+                numProcesso,
+                email,
+                senha,
+                tipoAcesso 
+            });
+
+            if (response.data.message) {
+                alert("Sucesso: " + response.data.message);
+                navigate("/");
+            } else {
+                alert("Erro inesperado: " + JSON.stringify(response.data));
+            }
+        } catch (error) {
+            const mensagemErro = error.response?.data?.error || error.message;
+            alert("Erro na requisição: " + mensagemErro);
+            console.error(error);
+        }
+    }
+
+    return (
+        <div className="login-screen">
+            <div className="form">
+                <div className='divTitle'>
+                    <h3 className="labelTitle">Crie sua conta</h3>
+                    <p className="labelSubtitle">Preencha com os seus dados pessoais</p>
+                </div>
+                <form onSubmit={handleRegister}>
+                    <input type="text" placeholder="Nome Completo" className="inputForm" 
+                           onChange={(e) => setNome(e.target.value)} required />
+                    
+                    <input type="number" placeholder="Nº de Processo" className="inputForm" 
+                           onChange={(e) => setNumProcesso(e.target.value)} required />
+                    
+                    <input type="email" placeholder="E-mail" className="inputForm" 
+                           onChange={(e) => setEmail(e.target.value)} required />
+                    
+                    <input type="password" placeholder="Senha" className="inputForm" 
+                           onChange={(e) => setSenha(e.target.value)} required />
+
+                    
+                    <div className="radioContainer">
+                        <span className="labelSubtitle">Registar como:</span>
+                        <div className="radioOptions">
+                            <label className="radioLabel">
+                                <input 
+                                    type="radio" 
+                                    name="tipoAcesso" 
+                                    value="aluno" 
+                                    checked={tipoAcesso === 'aluno'} 
+                                    onChange={(e) => setTipoUsuario(e.target.value)} 
+                                />
+                                Aluno
+                            </label>
+                            <br></br>
+                            <label className="radioLabel">
+                                <input 
+                                    type="radio" 
+                                    name="tipoAcesso" 
+                                    value="Admin" 
+                                    checked={tipoAcesso === 'admin'} 
+                                    onChange={(e) => setTipoUsuario(e.target.value)} 
+                                />
+                                Admin
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" className="buttonForm">Registar</button>
+                </form>
+                <p className="linkRegister">Já tem conta? <Link to="/">Faça Login</Link></p>
+            </div>
+        </div>
+    );
+};
+
+export default Register;

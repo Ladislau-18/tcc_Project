@@ -1,0 +1,76 @@
+
+.login-screen {
+    background-color: #f4f4f4; /* Cor de fundo suave */
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    background-color: #ffffff; 
+    padding: 40px;
+    border-radius: 5px; 
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); 
+    width: 450px;
+    
+}
+
+.divTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.labelTitle{
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}
+.labelSubtitle{
+    color: gray;
+}
+
+.inputForm{
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 5px 0px;
+    outline: none;
+    border: none;
+    background-color: #f0f0f0;
+}
+.inputForm:focus{
+    border: 1px solid #d96f32
+}
+
+.labelForgotPass{
+    font-size: 13px;
+    text-decoration: none;
+    color: Black;
+    font-style: italic;
+}
+.labelForgotPass:hover{
+    color: blue;
+}
+
+.imputForm:focus{
+    border: 2px solid #d96f32;
+}
+
+
+
+.buttonForm {
+    background-color: #d96f32;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;     
+}
+
+.linkRegister{
+    font-size: 13px; 
+    margin-top: 30px;
+}
