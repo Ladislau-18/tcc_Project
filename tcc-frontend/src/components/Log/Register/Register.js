@@ -76,7 +76,7 @@ const Register = () => {
                                 <input 
                                     type="radio" 
                                     name="tipoAcesso" 
-                                    value="Admin" 
+                                    value="admin" 
                                     checked={tipoAcesso === 'admin'} 
                                     onChange={(e) => setTipoUsuario(e.target.value)} 
                                 />

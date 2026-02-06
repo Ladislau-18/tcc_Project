@@ -1,0 +1,63 @@
+
+/*Cores fixas*/
+:root {
+  --cor-primaria: #d96f32;
+  --fundo-claro: #f4f4f4;
+  --fundo-escuro: #202020;
+  --texto-escuro: #202020;
+  --texto-claro: #f4f4f4;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.layout {
+  height: 100vh;
+}
+
+.header {
+  height: 60px;
+  background: var(--cor-primaria);
+  color: var(--texto-claro);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 25px;
+}
+
+.body {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+.sidebar {
+  width: 220px;
+  background: var(--fundo-escuro);
+  color: white;
+  padding: 20px 0px;
+}
+
+.sidebar div {
+  padding: 10px;
+  list-style: none;
+  margin-bottom: 5px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.sidebar div:hover{
+  color: rgb(255, 102, 0);
+  background-color: #d86e3118;
+}
+
+
+
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background: var(--fundo-claro);
+}

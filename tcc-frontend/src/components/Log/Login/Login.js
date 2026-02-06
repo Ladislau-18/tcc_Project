@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import './login.css';
 
 
-const Login = () => {
+function Login(){
     const [numProcesso, setNumProcesso] = useState('');
     const [senha, setSenha] = useState('');
     const [tipoAcesso, settipoAcesso] = useState('');
@@ -21,9 +21,10 @@ const Login = () => {
           });
 
           if (response.data.id) {
+
             alert("Bem-vindo, " + response.data.nome);
-            localStorage.setItem('user', JSON.stringify(response.data));
-            navigate('/home');
+            sessionStorage.setItem('user', JSON.stringify(response.data));
+            navigate('./pages/home');
           } 
           else {
             alert(response.data.error || "Erro desconhecido");
@@ -66,7 +67,7 @@ const Login = () => {
                                 <input 
                                     type="radio" 
                                     name="tipoAcesso" 
-                                    value="Admin" 
+                                    value="admin" 
                                     checked={tipoAcesso === 'admin'} 
                                     onChange={(e) => settipoAcesso(e.target.value)} 
                                 />

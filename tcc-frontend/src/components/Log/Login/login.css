@@ -1,6 +1,12 @@
 
+:root {
+  --cor-primaria: #d96f32;
+  --cor-fundo: #f4f4f4;
+  --texto-escuro: #202020;
+}
+
 .login-screen {
-    background-color: #f4f4f4; /* Cor de fundo suave */
+    background-color: var(--cor-fundo); /* Cor de fundo suave */
     height: 100vh;
     display: flex;
     align-items: center;
@@ -8,7 +14,7 @@
 }
 
 .form {
-    background-color: #ffffff; 
+    background-color: white; 
     padding: 40px;
     border-radius: 5px; 
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); 
@@ -22,7 +28,7 @@
     align-items: center;
 }
 .labelTitle{
-    color: black;
+    color: var(--texto-escuro);
     font-weight: bold;
     text-align: center;
 }
@@ -40,27 +46,27 @@
     background-color: #f0f0f0;
 }
 .inputForm:focus{
-    border: 1px solid #d96f32
+    border: 1px solid var(--cor-primaria);
 }
 
 .labelForgotPass{
     font-size: 13px;
     text-decoration: none;
-    color: Black;
+    color: var(--texto-escuro);
     font-style: italic;
 }
 .labelForgotPass:hover{
-    color: blue;
+    color: var(--cor-primaria);
 }
 
 .imputForm:focus{
-    border: 2px solid #d96f32;
+    border: 2px solid var(--cor-primaria);
 }
 
 
 
 .buttonForm {
-    background-color: #d96f32;
+    background-color: var(--cor-primaria);
     color: white;
     border: none;
     padding: 10px;
