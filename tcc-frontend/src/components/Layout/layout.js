@@ -1,27 +1,25 @@
 import Header from "../Header/header";
 import Sidebar from "../Sidebar/sidebar";
+import { Outlet } from 'react-router-dom';
 
 import "./layout.css"
 
-function Layout ({children}){
+function Layout (){
 
         const userStorage = sessionStorage.getItem('user');
         const user = userStorage ? JSON.parse(userStorage) : null;
 
-        return(
-
+        return (
             <div className="layout">
-                <Header nome={user.nome}/>
-                
+                <Header />
                 <div className="body">
-                    <Sidebar tipo={user.tipo}/>
-                    <div className="content">
-                        {children}
-                    </div>
+                <Sidebar />
+                <div className="content">
+                    <Outlet />
                 </div>
-
             </div>
-        )
+        </div>
+    );
 }
 
 export default Layout;

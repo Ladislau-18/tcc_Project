@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import Layout from "../../Layout/layout";
-import SearchTCC from "../Dashboard/DashboardUser";
+
+import { SearchTCC, TccList }from '../../components/Dashboard/DashboardUser';
+
 
 function Home(props) {
   const [user, setUser] = useState(null);
@@ -18,9 +19,10 @@ function Home(props) {
 
 
   return (
-    <Layout>
+    <>
         <SearchTCC />
-    </Layout>
+        <TccList />
+    </>
   );
 }
 

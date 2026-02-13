@@ -1,16 +1,27 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
+import '../Sidebar/sidebar.css';
 const Sidebar = (props) =>{
 
+    const navigate = useNavigate();
+    const goSearch = () => {
+        navigate("/pages/pesquisar");
+    };
+    const goProfile = () => {
+        navigate("/pages/perfil");
+    };
+    
 
     return(
 
         <aside className="sidebar">
             <nav>
 
-                <div>Perfil</div>
-                <div>Pesquisar TCC</div>
+                <div onClick={goProfile}>Perfil</div>
+                <div onClick={goSearch}>Pesquisar TCC</div>
                 <div>Catálogo de TCCs</div>
+                
                 {props.tipo === 'admin' && (
                     <>
                         <div>Cadastrar TCC</div>
@@ -20,6 +31,7 @@ const Sidebar = (props) =>{
                     </>
                 )}
                 <div>Favoritos</div>
+                
 
             </nav>
         </aside>

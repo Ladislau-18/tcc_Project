@@ -1,0 +1,31 @@
+
+
+.divPerfil{
+    display: grid;
+    grid-template-columns: max-content 1fr auto;
+    border: 1px solid var(--cor-primaria);
+    border-radius: 15px;
+    padding: 20px;
+    background-color: white;
+}
+
+.photoProfile > img{
+    background-color: rgb(230, 230, 230);
+    border-radius: 50%;
+    border: 4px solid var(--cor-primaria);
+    width:150px;
+    height: 150px;
+}
+
+.photoProfile{
+    width: auto;
+    height: auto;
+    padding: 0px 10px;
+}
+
+
+.prefilInfo{
+}
+
+   
+

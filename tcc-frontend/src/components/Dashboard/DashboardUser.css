@@ -1,0 +1,95 @@
+
+.searchMain{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.searchContainer{
+    background-color: var(--cor-primaria);
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+    width: auto;
+    height: auto;
+    padding: 20px 80px;
+    border-radius: 45px;
+
+}
+
+.imputSearch{
+    width: 800px;
+    padding: 10px;
+    border: 1px solid var(--fundo-claro);
+    border-radius: 25px ;
+    cursor: pointer;
+    
+}
+
+.imputSearch:hover{
+    border: 1px solid gray;
+    background-color: rgb(243, 243, 243);
+}
+
+.divBtn{
+    border: 1px solid var(--fundo-claro);
+    border-radius: 0px 25px 25px 0px;
+}
+
+.btnSearch{
+    
+    padding: 10px 15px ;
+    border: none;
+    border-radius: 0px 25px 25px 0px;
+    background-color: var(--cor-primaria);
+    color: var(--texto-claro);
+    font-weight: bolder;
+}
+
+
+/*
+############ TCCList ################
+*/
+
+div > h2 {
+    margin: 40px 0px 40px 100px;
+}
+
+.recentTcc{
+    display: grid;
+    grid-template-columns: repeat(3, 2fr); 
+    align-items: start; 
+    gap: 30px;
+    margin: 0px auto;
+    width: 100%;
+}
+
+.itenTcc{
+    background-color: rgb(230, 230, 230);
+    padding: 20px 30px;
+    border: 2px solid var(--cor-primaria);
+    max-width: 1200px;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 300px;
+}
+
+.imgFile{
+    width: 70px;
+    height: 70px;
+    stroke: var(--fundo-escuro);
+
+}
+
+.itenTcc > button{
+    border: none;
+    background-color: var(--cor-primaria);
+    color: var(--texto-claro);
+    border-radius: 10px;
+    padding: 10px 20px;
+    transition: 0.5s;
+}
+
+

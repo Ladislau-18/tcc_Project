@@ -1,5 +1,7 @@
 import React from "react";
 
+import '../Header/header.css';
+
 const Header = () =>{
     const user = JSON.parse(sessionStorage.getItem("user"));
     
@@ -8,11 +10,10 @@ const Header = () =>{
             <h2>Acervo Digital</h2>
                 {user && (
                     <div className="user-info">
-                        👤 {user.nome}
+                        👤 {user.nome} {user.tipo}
                     </div>
                     
-                )}
-                <p>logado como: <strong>{user.tipo}</strong></p>
+                )} 
         </header>
     )
 

@@ -1,0 +1,25 @@
+
+.sidebar {
+  width: 220px;
+  background: var(--fundo-escuro);
+  color: white;
+  padding: 20px 0px;
+  min-height: 100%;
+  
+}
+
+.sidebar div {
+  padding: 10px;
+  list-style: none;
+  margin-bottom: 5px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.sidebar div:hover{
+  color: rgb(255, 102, 0);
+  background-color: #d86e3118;
+}
+
+
+
