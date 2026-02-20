@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { SearchTCC, TccList }from '../../components/Dashboard/DashboardUser';
+import { SearchTCC, TccList }from '../../components/Search/goSearch/goSearch';
 
 
 function Home(props) {

@@ -1,0 +1,37 @@
+
+/*
+Older style css is in 'goSearch.css
+Here only modified the imputSearch's broder-radio 
+*/
+
+.imputSearchP{
+    width: 800px;
+    padding: 10px;
+    border: 1px solid var(--fundo-claro);
+    border-radius: 25px 0px 0px 25px ;
+    cursor: pointer;
+    
+}
+
+.imputSearchP:hover{
+    border: 1px solid gray;
+    background-color: rgb(243, 243, 243);
+}
+
+.divBtn{
+    border: 1px solid var(--fundo-claro);
+    border-radius: 0px 25px 25px 0px;
+}
+
+.btnSearch{
+    padding: 10px 15px ;
+    border: none;
+    border-radius: 0px 25px 25px 0px;
+    background-color: var(--cor-primaria);
+    color: var(--texto-claro);
+    font-weight: bolder;
+}
+
+
+
+

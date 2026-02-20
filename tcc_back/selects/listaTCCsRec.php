@@ -1,3 +1,4 @@
+
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
@@ -21,3 +22,12 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 echo json_encode($tccs);
+
+
+
+
+
+
+
+
+

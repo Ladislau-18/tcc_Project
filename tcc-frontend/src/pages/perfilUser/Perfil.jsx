@@ -8,7 +8,7 @@ function Profile() {
         <>
         <div className='divPerfil'>
             <div className='photoProfile'>
-                <img src="" alt="L" />
+                <img src="../../assent/do-utilizador.png" alt="" />
             </div>
             <div className='prefilInfo'>
                 <h1>Ladislau Cabanga</h1>
@@ -16,8 +16,24 @@ function Profile() {
                 <span>Curso: </span><br />
                 <span>Nº Processo: 00000</span><br />
             </div>
+            <div>
+                <button className='editProfile'>Editar</button>
+            </div>
+            
         </div>
-        
+
+        <div className="info">
+            <div className="divProfile">
+                <h3>Undefined</h3>
+            </div>
+            <div className="divProfile">
+                <h3>Meus Favoritos</h3>
+                <p>Tal</p>
+            </div>
+        </div>
+
+
+        <h1>Recomendações para Você</h1>
         </>
     )
     

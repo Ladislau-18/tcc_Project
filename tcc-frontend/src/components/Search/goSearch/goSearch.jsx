@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileIcon } from '../../assets/icons';
+import { FileIcon } from '../../../assets/icons';
 
-import '../Dashboard/DashboardUser.css';
+import './goSearch.css';
 
 
 
