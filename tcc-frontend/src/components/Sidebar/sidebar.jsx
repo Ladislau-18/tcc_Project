@@ -11,13 +11,16 @@ const Sidebar = (props) =>{
     const goProfile = () => {
         navigate("/pages/perfil");
     };
+    const goHome = () => {
+        navigate("/pages/home");
+    };
     
 
     return(
 
         <aside className="sidebar">
             <nav>
-
+                <div onClick={goHome}>Home</div>
                 <div onClick={goProfile}>Perfil</div>
                 <div onClick={goSearch}>Pesquisar TCC</div>
                 <div>Catálogo de TCCs</div>

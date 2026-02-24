@@ -13,6 +13,7 @@
     height: auto;
     padding: 20px 80px;
     border-radius: 45px;
+    margin-bottom: 20px;
 
 }
 
@@ -63,25 +64,30 @@ div > h2 {
 }
 
 .itenTcc{
-    background-color: rgb(230, 230, 230);
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between;
+    background-color: white;
     padding: 20px 30px;
     border: 2px solid var(--cor-primaria);
     max-width: 1200px;
     width: 400px;
-    height: 400px;
+    height: 350px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
     min-height: 300px;
 }
 
+
+
 .imgFile{
-    width: 70px;
-    height: 70px;
-    stroke: var(--fundo-escuro);
+    width: 50px;
+    height: 50px;
+    stroke: gray;
+    margin: 0px 20px 20px 0px;
 
 }
-
 .itenTcc > button{
     border: none;
     background-color: var(--cor-primaria);

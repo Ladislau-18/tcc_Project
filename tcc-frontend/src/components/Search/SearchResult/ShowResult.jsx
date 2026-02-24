@@ -1,23 +1,28 @@
+import { TccCard } from '../goSearch/goSearch';
+import { FileIcon } from '../../../assets/icons';
 
+import './showResult.css';
 
 
 function ShowResult ({ items, loading }){
     if (loading) return <p className="status-msg">Pesquisando...</p>;
     
     if (!items || !Array.isArray(items) || items.length === 0) {
-        return <p>Nenhum resultado encontrado.</p>;
+        return (
+            <div className='TccNotFound'>
+                <h1>Ups! Nenhum ítem encontrado</h1>
+                <p>Tente mudar as palavras chaves</p>
+            </div>
+        );
     }
+    
     return (
-        <div className="results-container">
+        <div className="resultsContainer">
             <h2>Resultado da pesquisa</h2>
-            <div className="tcc-grid">
+            <div className="tccResults">
                 {items.map((tcc, index) => (
-                    <div key={index} className="tcc-card"> 
-                        <h3>{tcc.titulo}</h3>
-                        <p><strong>Curso:</strong> {tcc.nome_curso}</p>
-                        <p><strong>Ano:</strong> {tcc.anoDefesa}</p>
-                        <button className="btn-detalhes">Ver detalhes</button>
-                    </div>
+                   <TccCard key={tcc.id || index} tcc={tcc}/>
+                    
                 ))}
             </div>
         </div>

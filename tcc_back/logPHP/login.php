@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 session_start();
 
-include_once "config.php";
+include_once "../config.php";
 
 $dados = json_decode(file_get_contents("php://input"));
 

@@ -49,18 +49,8 @@ function TccList() {
         <div className='recentTcc' >
             {tccs.length === 0 && <p>Nenhum TCC encontrado.</p>}
 
-            {tccs.map(tcc => (
-                <div key={tcc.id} className='itenTcc'>
-                <FileIcon />
-                <h4>{tcc.titulo}</h4>
-                <p><strong>Autor:</strong> {tcc.autor}</p>
-                <p><strong>Ano:</strong> {tcc.anoDefesa}</p>
-                <p><strong>Curso:</strong> {tcc.nome_Curso}</p>
-
-                <button className="btnTccDect">
-                    Ver detalhes
-                </button>
-            </div>
+            {tccs.map((tcc, index) => (
+                <TccCard key={tcc.id || index} tcc={tcc} />
             ))}
             
         </div>
@@ -69,5 +59,25 @@ function TccList() {
 }
 
 
-export  { SearchTCC, TccList };
+function TccCard ({tcc}){
+
+  return (
+    <div key={tcc.id} className='itenTcc'>
+                  <div>
+                    <FileIcon className ="iconTcc" />
+                    <h4>{tcc.titulo}</h4>
+                    <p><strong>Autor:</strong> {tcc.autor}</p>
+                    <p><strong>Ano:</strong> {tcc.anoDefesa}</p>
+                    <p><strong>Curso:</strong> {tcc.nome_curso}</p>
+                  </div>
+
+                  <button className="btnTccDect">
+                    Ver detalhes
+                  </button>
+                </div>
+  )
+}
+
+
+export  { SearchTCC, TccList, TccCard };
     

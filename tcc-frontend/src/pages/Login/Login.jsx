@@ -14,7 +14,7 @@ function Login(){
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('http://localhost/TCC_PROJETO/tcc_back/login.php', {
+          const response = await axios.post('http://localhost/TCC_PROJETO/tcc_back/logPHP/login.php', {
             numProcesso,
             senha,
             tipoAcesso
