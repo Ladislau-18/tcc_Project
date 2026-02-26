@@ -8,7 +8,7 @@ header("Access-Control-Allow-Methods: *");
 $host = "localhost";
 $user = "root";
 $pass = "";
-$bd = "bd_tcc";
+$bd = "acervo_tcc";
 
 try {
     $connection = new mysqli ($host, $user, $pass, $bd);
@@ -17,8 +17,8 @@ try {
     if($connection -> connect_errno){
         throw new Exception("Falha ao conectar: " . $connection->connect_error);
     }
-
-} catch (Exception $e) {
+} 
+catch (Exception $e) {
     error_log($e->getMessage());
     die("Erro interno no servidor. Tente novamente mais tarde.");
 }

@@ -10,20 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-include_once 'config.php';
+include_once '../config.php';
 
 $dados = json_decode(file_get_contents("php://input"));
 
-if (!empty($dados->nome) && !empty($dados->numProcesso) && !empty($dados->email) && !empty($dados->senha) && !empty($dados->tipoAcesso)) {
+if (!empty($dados->nome) && !empty($dados->numProcesso) && !empty($dados->email) && !empty($dados->senha)) {
     $senhaHash = password_hash($dados->senha, PASSWORD_DEFAULT);
     
-    $query = "INSERT INTO utilizadores (nome_utilizador, numProcesso, email, senha, tipoAcesso) VALUES (?, ?, ?, ?, ?)";
+    $query = "INSERT INTO utilizadores (nome, numProcesso, email, senha) VALUES (?, ?, ?, ?)";
     
     $stmt = $connection->prepare($query);
     
     if ($stmt) {
      
-        $stmt->bind_param("sssss", $dados->nome, $dados->numProcesso, $dados->email, $senhaHash, $dados->tipoAcesso);
+        $stmt->bind_param("ssss", $dados->nome, $dados->numProcesso, $dados->email, $senhaHash);
         
         if ($stmt->execute()) {
             echo json_encode(["message" => "Usuário cadastrado com sucesso!"]);
@@ -34,7 +34,8 @@ if (!empty($dados->nome) && !empty($dados->numProcesso) && !empty($dados->email)
     } else {
         echo json_encode(["Erro na preparação do banco de dados."]);
     }
-} else {
+} 
+else {
     echo json_encode("Preencha todos os campos obrigatórios.");
 }
 ?>

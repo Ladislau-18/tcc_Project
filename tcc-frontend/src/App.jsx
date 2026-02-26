@@ -1,4 +1,5 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { Toaster } from "react-hot-toast";
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Home from './pages/Home/home';
@@ -8,7 +9,8 @@ import Profile from './pages/perfilUser/Perfil'
 
 function App() {
   return (
-    
+    <>
+    <Toaster position="top-right"/>
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -22,6 +24,7 @@ function App() {
         </Route>
       </Routes>
     </Router>
+    </>
   );
 }
 

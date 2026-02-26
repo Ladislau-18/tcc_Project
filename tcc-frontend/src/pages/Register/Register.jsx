@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 
 const Register = () => {
     const [nome, setNome] = useState('');
@@ -16,23 +17,22 @@ const Register = () => {
 
         try {
             // 2. ADICIONAR O 'CARGO' NO OBJETO ENVIADO PARA O PHP
-            const response = await axios.post('http://localhost/TCC_PROJETO/tcc_back/register.php', {
+            const response = await axios.post('http://localhost/TCC_PROJETO/tcc_back/logPHP/register.php', {
                 nome,
                 numProcesso,
                 email,
-                senha,
-                tipoAcesso 
+                senha 
             });
 
             if (response.data.message) {
-                alert("Sucesso: " + response.data.message);
+                toast.success("Usuário cadastrado com sucesso");
                 navigate("/");
             } else {
-                alert("Erro inesperado: " + JSON.stringify(response.data));
+                toast.error("Erro inesperado: " + JSON.stringify(response.data));
             }
         } catch (error) {
             const mensagemErro = error.response?.data?.error || error.message;
-            alert("Erro na requisição: " + mensagemErro);
+            toast.error("Erro na requisição: " + mensagemErro);
             console.error(error);
         }
     }
@@ -56,34 +56,6 @@ const Register = () => {
                     
                     <input type="password" placeholder="Senha" className="inputForm" 
                            onChange={(e) => setSenha(e.target.value)} required />
-
-                    
-                    <div className="radioContainer">
-                        <span className="labelSubtitle">Registar como:</span>
-                        <div className="radioOptions">
-                            <label className="radioLabel">
-                                <input 
-                                    type="radio" 
-                                    name="tipoAcesso" 
-                                    value="aluno" 
-                                    checked={tipoAcesso === 'aluno'} 
-                                    onChange={(e) => setTipoUsuario(e.target.value)} 
-                                />
-                                Aluno
-                            </label>
-                            <br></br>
-                            <label className="radioLabel">
-                                <input 
-                                    type="radio" 
-                                    name="tipoAcesso" 
-                                    value="admin" 
-                                    checked={tipoAcesso === 'admin'} 
-                                    onChange={(e) => setTipoUsuario(e.target.value)} 
-                                />
-                                Admin
-                            </label>
-                        </div>
-                    </div>
                     
                     <button type="submit" className="buttonForm">Registar</button>
                 </form>

@@ -1,0 +1,109 @@
+:root {
+  --cor-primaria: #d96f32;
+  --fundo-claro: #f4f4f4;
+  --fundo-escuro: #202020;
+  --texto-escuro: #202020;
+  --texto-claro: #f4f4f4;
+}
+
+.infoMain{
+    display: grid;
+    grid-template-columns: repeat(3, 2fr);
+    gap: 30px;
+    margin-bottom: 25px;
+
+    
+}
+
+.divDashInfo{
+    border: 1px solid var(--cor-primaria);
+    border-radius: 15px;
+    padding: 15px;
+    background-color: white;
+}
+
+.divDashInfo > div{
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    padding: 5px;
+}
+
+
+
+
+
+
+
+.graficosMain{
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    gap: 30px;
+    margin-bottom: 25px;
+    
+}
+
+.graficosMain > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 15px;
+    padding:15px;
+    border: 1px solid var(--cor-primaria);
+}
+
+.graficos{
+    background-color: gray;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}
+
+
+
+
+
+.titleTable{
+    background-color: #bebebe;
+    padding: 12px;
+}
+
+.tableContainer{
+    background-color: white;
+    border: 1px solid var(--cor-primaria) ;
+}
+
+.tabla{
+    width: 100%;
+    border-collapse: collapse;
+    
+}
+thead{
+    background-color: #eeeeee;
+}
+
+td, th{
+    padding: 10px 5px;
+    text-align: left;
+    
+}
+
+.tabla tbody tr:nth-child(even) {
+    background-color: #eeeeee;
+}
+
+.tabla tbody tr:hover {
+    background-color: #dadada;
+}
+
+
+
+
+
+
+
+
+
+
+
