@@ -20,11 +20,13 @@
     border-radius: 15px;
     padding: 15px;
     background-color: white;
+    
 }
 
 .divDashInfo > div{
-    display: grid;
-    grid-template-columns: repeat(2, 2fr);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 5px;
 }
 
@@ -35,64 +37,68 @@
 
 
 .graficosMain{
-    display: grid;
-    grid-template-columns: repeat(2, 2fr);
+    display: flex;/*
+    grid-template-columns: repeat(2, 2fr);*/
+    justify-content: space-between;
     gap: 30px;
     margin-bottom: 25px;
+    width: 100%;
+    box-sizing: border-box;
     
 }
 
 .graficosMain > div {
-    display: flex;
-    flex-direction: column;
+    flex: 1;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: #fff;
     border-radius: 15px;
     padding:15px;
+    height: 350px;
     border: 1px solid var(--cor-primaria);
 }
 
-.graficos{
-    background-color: gray;
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
+.ContainerGraph{
+    width: 100%;
+    height: 300px;
+
+}
+.graph{
+    width: 100%;
+    height: 100%;
+    margin-top: -50px;
 }
 
 
 
+
+
+
+/**************Tabela***************/
 
 
 .titleTable{
     background-color: #bebebe;
     padding: 12px;
 }
-
 .tableContainer{
     background-color: white;
     border: 1px solid var(--cor-primaria) ;
 }
-
 .tabla{
     width: 100%;
     border-collapse: collapse;
-    
 }
 thead{
     background-color: #eeeeee;
 }
-
 td, th{
     padding: 10px 5px;
-    text-align: left;
-    
+    text-align: left; 
 }
-
 .tabla tbody tr:nth-child(even) {
     background-color: #eeeeee;
 }
-
 .tabla tbody tr:hover {
     background-color: #dadada;
 }

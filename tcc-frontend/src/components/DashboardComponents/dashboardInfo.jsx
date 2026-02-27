@@ -1,8 +1,9 @@
 
 import "./dashboardInfo.css";
 import { BookIcon, InsertIcon, GraficIcon } from "../../assets/icons";
+import { BarGrafic, CircleGrafic } from "./grafics"; 
 
-function DashInfo ({dados}){
+function DashInfo ({dados, graphData}){
 
     return (
         <>
@@ -12,7 +13,7 @@ function DashInfo ({dados}){
                     <h3>Total de Relatórios</h3>
                     <div>
                         <h3>{dados.totalRelatorios}</h3>
-                        <BookIcon/>
+                        <BookIcon />
                     </div>
                 </div>
 
@@ -35,7 +36,7 @@ function DashInfo ({dados}){
             </div>
 
 
-            <DashGraficos />
+            <DashGraficos graficData={graphData}/>
             <TableActivity/>
         </>
 
@@ -44,26 +45,16 @@ function DashInfo ({dados}){
 }
 
 
-function DashGraficos(){
+function DashGraficos({graficData}){
 
     return (
         <div className="graficosMain">
-            <div>
-                <div className="graficos">
+          <div className="graficos">
+            <BarGrafic data={graficData}/>
+          </div>
 
-                </div>
-                <span>Dados</span>
-                <span>Dados</span>
-                <span>Dados</span>
-            </div>
             <div>
-                <div className="graficos">
-                    
-                </div>
-                
-                <span>Dados</span>
-                <span>Dados</span>
-                <span>Dados</span>
+                <CircleGrafic data={graficData}/>
             </div>
             
         
@@ -136,9 +127,6 @@ function TableActivity(){
 
     )
 }
-
-
-
 
 
 export default DashInfo;
