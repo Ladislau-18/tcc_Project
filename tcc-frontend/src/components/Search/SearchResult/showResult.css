@@ -1,50 +1,30 @@
-.TccNotFound{
-    background-color: gray;
+.divTccNotFound{
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+.tccNotFound{
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.resultsContainer{
-    
 
-}
 
 .tccResults{
-    border: 1px solid gray;
     display: grid;
-    grid-template-columns: repeat(3, 2fr); 
-    align-items: start; 
+    grid-template-columns: repeat(2, 2fr); 
     gap: 30px;
-    margin: 0px auto;
     width: 100%;
     
 }
 
-.tccCard {
-    border: 1px solid var(--cor-primaria);
-    background-color: white;
-    padding: 20px 30px;
-    border: 2px solid var(--cor-primaria);
-    max-width: 1200px;
-    width: 400px;
-    height: 250px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 10px;
-    min-height: 200px;
-    text-overflow: clip;
-    
-}
 
-.tccResults {
-}
 
-.btn{
-    
-    border: 1px solid red;
-    width: 100%;
-}
+
+
 .btnSeeMore {
     background-color: var(--cor-primaria);
     border-radius: 5px;

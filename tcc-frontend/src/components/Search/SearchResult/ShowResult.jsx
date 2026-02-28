@@ -1,17 +1,28 @@
 import { TccCard } from '../goSearch/goSearch';
-import { FileIcon } from '../../../assets/icons';
-
+import { SearchNotFoundIcon } from '../../../assets/icons';
 import './showResult.css';
 
 
-function ShowResult ({ items, loading }){
+function ShowResult ({ items, loading, hasSearched }){
+
+
+    if (!hasSearched) {
+        return (
+            <div className="status-msg">
+                <h2>Faça uma pesquisa para ver os resultados</h2>
+            </div>
+        );
+    }
     if (loading) return <p className="status-msg">Pesquisando...</p>;
     
     if (!items || !Array.isArray(items) || items.length === 0) {
         return (
-            <div className='TccNotFound'>
-                <h1>Ups! Nenhum ítem encontrado</h1>
-                <p>Tente mudar as palavras chaves</p>
+            <div className='divTccNotFound' >
+                <div className='tccNotFound'>
+                    <SearchNotFoundIcon />
+                    <h1>Nenhum ítem encontrado</h1>
+                    <p><strong>Tente mudar as palavras chaves</strong></p>
+                </div>
             </div>
         );
     }

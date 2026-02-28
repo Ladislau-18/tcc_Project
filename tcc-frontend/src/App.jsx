@@ -5,7 +5,8 @@ import Register from './pages/Register/Register';
 import Home from './pages/Home/home';
 import SearchPage from './pages/searchTCC/pesquisar';
 import Layout from './components/Layout/layout';
-import Profile from './pages/perfilUser/Perfil'
+import Profile from './pages/perfilUser/perfil'
+import Catalog from './pages/catalog/catalog'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/pages/home" element={<Home />} />
           <Route path="/pages/pesquisar" element={<SearchPage />} />
           <Route path="/pages/perfil" element={<Profile />} />
+          <Route path="/pages/catalog" element={<Catalog />} />
         </Route>
       </Routes>
     </Router>

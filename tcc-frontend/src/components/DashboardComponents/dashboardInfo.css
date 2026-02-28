@@ -6,6 +6,8 @@
   --texto-claro: #f4f4f4;
 }
 
+
+/*#################### Cards Dashborard ####################*/
 .infoMain{
     display: grid;
     grid-template-columns: repeat(3, 2fr);
@@ -34,7 +36,7 @@
 
 
 
-
+/*#################### Graficos do Dashborard ####################*/
 
 .graficosMain{
     display: flex;/*
@@ -74,7 +76,7 @@
 
 
 
-/**************Tabela***************/
+/*#################### Tabela do Dashborard ####################*/
 
 
 .titleTable{

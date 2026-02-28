@@ -3,6 +3,8 @@ import './searchBar.css';
 
 
 function SearchBar ({ query, setQuery, onSearch }){
+
+
     return (
         <div className="searchMain">
             <div className="searchContainer">

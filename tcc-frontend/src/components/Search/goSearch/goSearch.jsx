@@ -1,38 +1,42 @@
-import React, { useState } from 'react';
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { FileIcon } from '../../../assets/icons';
 
 import './goSearch.css';
 
 
 
-
-function SearchTCC() {
-  const navigate = useNavigate();
-
-  const handleRedirect = () => {
-    navigate("/pages/pesquisar");
-  };
+function TccCard ({tcc}){
 
   return (
-    <div className="searchMain">
-      <div className="searchContainer">
-        <input 
-          type="text" 
-          placeholder="Pesquisar por título ou autor..." 
-          className='imputSearch'
-          onClick={handleRedirect}
-          readOnly
-        />
-        
+    <div key={tcc.id} className='itenTcc'>
+      <div className="icon">
+        <FileIcon className ="iconTcc" />
       </div>
+                  <div className="cardTccInfo">
+                    <div>
+
+                    <span> {tcc.autorNome}</span><br />
+                    <h5>{tcc.titulo}</h5>
+                    
+                    <span>{tcc.nome}</span><br />
+                    <span> {tcc.anoDefesa}</span><br />
+                    
+                    </div>
+                    <div className="divBtnSee">
+                      <button className="btnTccDect">
+                        Ver detalhes
+                      </button>
+
+                    </div>
+                  </div>
+
     </div>
-  );
+  )
 }
 
 
 
+/*
 function TccList() {
   const [tccs, setTccs] = useState([]);
 
@@ -58,26 +62,9 @@ function TccList() {
   );
 }
 
-
-function TccCard ({tcc}){
-
-  return (
-    <div key={tcc.id} className='itenTcc'>
-                  <div>
-                    <FileIcon className ="iconTcc" />
-                    <h4>{tcc.titulo}</h4>
-                    <p><strong>Autor:</strong> {tcc.autor}</p>
-                    <p><strong>Ano:</strong> {tcc.anoDefesa}</p>
-                    <p><strong>Curso:</strong> {tcc.nome_curso}</p>
-                  </div>
-
-                  <button className="btnTccDect">
-                    Ver detalhes
-                  </button>
-                </div>
-  )
-}
+*/
 
 
-export  { SearchTCC, TccList, TccCard };
+
+export {TccCard };
     

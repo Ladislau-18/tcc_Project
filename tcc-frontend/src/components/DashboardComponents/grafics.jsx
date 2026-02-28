@@ -8,8 +8,6 @@ function BarGrafic({ data }) {
      }
 
   return (
-    
-      
       <div className="graph-container" style={{width: '100%', height: 300, background: '#fff', padding: '15px', borderRadius: '8px' }}>
         <h4>Produção de TCCs por Ano</h4>
         <ResponsiveContainer  width="100%" height="100%" style={{'margin-left': "-15px", padding: '0px'}}>
@@ -22,8 +20,6 @@ function BarGrafic({ data }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-
-    
   );
 }
 

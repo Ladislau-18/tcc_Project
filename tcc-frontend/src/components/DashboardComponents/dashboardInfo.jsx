@@ -8,7 +8,6 @@ function DashInfo ({dados, graphData}){
     return (
         <>
         <div className="infoMain">
-
                 <div className="divDashInfo">
                     <h3>Total de Relatórios</h3>
                     <div>
@@ -34,13 +33,9 @@ function DashInfo ({dados, graphData}){
                 </div>
 
             </div>
-
-
             <DashGraficos graficData={graphData}/>
             <TableActivity/>
         </>
-
-
     )
 }
 
@@ -53,13 +48,10 @@ function DashGraficos({graficData}){
             <BarGrafic data={graficData}/>
           </div>
 
-            <div>
-                <CircleGrafic data={graficData}/>
-            </div>
-            
-        
+          <div>
+            <CircleGrafic data={graficData}/>
+          </div>
         </div>
-
     )
 }
 

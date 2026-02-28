@@ -34,6 +34,7 @@
 .divBtn{
     border: 1px solid var(--fundo-claro);
     border-radius: 0px 25px 25px 0px;
+    
 }
 
 .btnSearch{
@@ -63,20 +64,20 @@ div > h2 {
     width: 100%;
 }
 
+
+/*######## Cards tcc ########*/
 .itenTcc{
     display: flex;
-    flex-direction: column; 
-    justify-content: space-between;
+    flex-direction:row; 
+    justify-content: start;
     background-color: white;
     padding: 20px 30px;
     border: 2px solid var(--cor-primaria);
     max-width: 1200px;
-    width: 400px;
-    height: 350px;
-    margin: 0 auto;
-    padding: 20px;
+    width: 100%;
+    height: auto;
     border-radius: 10px;
-    min-height: 300px;
+    min-height: 220px;
 }
 
 
@@ -84,17 +85,27 @@ div > h2 {
 .imgFile{
     width: 50px;
     height: 50px;
-    stroke: gray;
+    stroke: rgb(82, 82, 82);
     margin: 0px 20px 20px 0px;
 
 }
-.itenTcc > button{
+
+.cardTccInfo{
+    display: flex;
+    flex-direction: column;
+}
+
+.btnTccDect{
     border: none;
     background-color: var(--cor-primaria);
     color: var(--texto-claro);
     border-radius: 10px;
     padding: 10px 20px;
-    transition: 0.5s;
+    
+    
+}
+.divBtnSee{
+    margin-top: auto
 }
 
 
