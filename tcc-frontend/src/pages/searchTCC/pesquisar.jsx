@@ -13,10 +13,10 @@ function SearchPage() {
      const [hasSearched, setHasSearched] = useState(false);
 
     const handleSearch = async () => {
-        if (!query.trim()) return; // evita pesquisa vazia
+        if (!query.trim()) return;
 
         setLoading(true);
-        setHasSearched(true); // 🔥 ESSA LINHA resolve teu problema
+        setHasSearched(true);
         try {
             const response = await axios.get(`http://localhost/TCC_PROJETO/tcc_back/selects/searchTcc.php?q=${query}`);
             console.log(response.data)

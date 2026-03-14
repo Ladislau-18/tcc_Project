@@ -18,6 +18,9 @@ const Sidebar = (props) =>{
     const goCatalog = () => {
         navigate("/pages/catalog");
     };
+    const goRegist = () => {
+        navigate("/pages/registerTcc");
+    };
     
 
     return(
@@ -28,7 +31,7 @@ const Sidebar = (props) =>{
                 <div onClick={goHome}> <HomeIcon /> Dashboard</div>
                 <div onClick={goProfile}> <UserIcon /> Perfil</div>
                 <div onClick={goSearch}> <SearchIcon /> Pesquisar</div>
-                <div > <RegistIcon /> Registar TCC</div>
+                <div onClick={goRegist}> <RegistIcon /> Registar TCC</div>
                 <div onClick={goCatalog}> <CatalogIcon /> Catálogo de TCCs</div>
                 
 

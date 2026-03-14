@@ -1,0 +1,165 @@
+
+.gridMain{
+    display: grid;
+    gap: 30px;
+    grid-template-columns: repeat(2, 2fr);
+}
+
+
+.containerRegister{
+    border: 1px solid var(--cor-primaria);
+    border-radius: 15px;
+    padding: 15px;
+    background-color: white;
+
+}
+
+
+.containerRegister > div{
+    display: flex;
+    align-items: start;
+    justify-content: start;
+}
+
+.divInputs{
+    display: flex;
+    flex-direction: column;
+}
+.gridInput{
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    gap: 20px;
+    width: 100%;
+}
+
+
+
+
+.inputContainer{
+    position: relative;
+    width: 100%;
+
+}
+
+.inputContainer > input{
+    width: 100%;
+    padding: 7px;
+    background: transparent;
+    border: 1px solid var(--cor-primaria);
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.inputContainer > select{
+    width: 100%;
+    padding: 7px;
+    background: transparent;
+    border: 1px solid var(--cor-primaria);
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    appearance: none;
+}
+
+
+label{
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+    background: transparent;
+    padding: 0px 5px;
+    pointer-events: none;
+    transition: all 0.2s ease ;
+}
+/*Para input*/
+.inputContainer > input:focus + label, 
+.inputContainer > input:not(:placeholder-shown) + label,
+/*Para input*/
+.inputContainer select:focus + label,
+.inputContainer select:valid + label{
+    top: 0;
+    left: 8px;
+    font-size: 14px;
+    color: var(--cor-primaria);
+    background: white;
+
+}
+
+
+.btnDraft{
+    border: none;
+    background-color: var(--cor-primaria);
+    color: var(--texto-claro);
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+
+
+
+
+
+
+
+
+/* Estilo do Fundo Opaco */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7) !important;/* Fundo escuro opaco */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Garante que fica acima de tudo */
+}
+
+/* Caixa Branca Flutuante */
+.modal-content {
+    background: var(--fundo-claro);
+    width: 90%;
+    max-width: 500px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f4f4f4;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-save {
+    background-color: var(--cor-primaria); /* Laranja do seu sistema */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    flex: 1;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-edit {
+    background-color: #e0e0e0;
+    color: var(--texto-escuro);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}

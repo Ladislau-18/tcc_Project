@@ -7,6 +7,7 @@ import SearchPage from './pages/searchTCC/pesquisar';
 import Layout from './components/Layout/layout';
 import Profile from './pages/perfilUser/perfil'
 import Catalog from './pages/catalog/catalog'
+import RegisterTcc from './pages/RegisterTcc/registerTcc';
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
           <Route path="/pages/pesquisar" element={<SearchPage />} />
           <Route path="/pages/perfil" element={<Profile />} />
           <Route path="/pages/catalog" element={<Catalog />} />
+          <Route path="/pages/registerTcc" element={<RegisterTcc />} />
+          
         </Route>
       </Routes>
     </Router>

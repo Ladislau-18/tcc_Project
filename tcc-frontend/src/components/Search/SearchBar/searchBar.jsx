@@ -1,6 +1,6 @@
 
 import './searchBar.css';
-
+import { SearchIcon } from '../../../assets/icons';
 
 function SearchBar ({ query, setQuery, onSearch }){
 
@@ -12,9 +12,10 @@ function SearchBar ({ query, setQuery, onSearch }){
                     type="text" 
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Pesquisar por título ou autor..." 
+                    placeholder="Busque por aluno, projeto, ou ano..." 
                     className='imputSearchP'
                 />
+                
                 <div className="divBtn">
                     <button onClick={onSearch} className="btnSearch">
                         Pesquisar

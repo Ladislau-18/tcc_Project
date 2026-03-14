@@ -1,8 +1,9 @@
 
 .searchMain{
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    border: 1px solid red;
 }
 .searchContainer{
     background-color: var(--cor-primaria);
@@ -11,9 +12,10 @@
     align-items: center;
     width: auto;
     height: auto;
-    padding: 20px 80px;
-    border-radius: 45px;
+    padding: 15px ;
+    border-radius: 10px;
     margin-bottom: 20px;
+    border: 1px solid rgb(55, 0, 255);
 
 }
 
@@ -27,20 +29,19 @@
 }
 
 .imputSearch:hover{
-    border: 1px solid gray;
     background-color: rgb(243, 243, 243);
 }
 
 .divBtn{
     border: 1px solid var(--fundo-claro);
-    border-radius: 0px 25px 25px 0px;
+    border-radius: 0px 10px 10px 0px;
     
 }
 
 .btnSearch{
     padding: 10px 15px ;
     border: none;
-    border-radius: 0px 25px 25px 0px;
+    border-radius: 0px 10px 10px 0px;
     background-color: var(--cor-primaria);
     color: var(--texto-claro);
     font-weight: bolder;
