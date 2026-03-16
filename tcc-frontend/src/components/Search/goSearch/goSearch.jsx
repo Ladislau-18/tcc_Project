@@ -35,36 +35,5 @@ function TccCard ({tcc}){
 }
 
 
-
-/*
-function TccList() {
-  const [tccs, setTccs] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost/TCC_PROJETO/tcc_back/selects/listaTCCsRec.php")
-      .then(res => res.json())
-      .then(data => setTccs(data))
-      .catch(err => console.error(err));
-  }, []);
-
-  return (
-    <div>
-        <h2>Adicionados recentemente</h2>
-        <div className='recentTcc' >
-            {tccs.length === 0 && <p>Nenhum TCC encontrado.</p>}
-
-            {tccs.map((tcc, index) => (
-                <TccCard key={tcc.id || index} tcc={tcc} />
-            ))}
-            
-        </div>
-    </div>
-  );
-}
-
-*/
-
-
-
 export {TccCard };
     

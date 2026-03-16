@@ -8,19 +8,17 @@ function SearchBar ({ query, setQuery, onSearch }){
     return (
         <div className="searchMain">
             <div className="searchContainer">
+                <div className="divIcon">
+                    <SearchIcon  />
+                </div>
                 <input 
                     type="text" 
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Busque por aluno, projeto, ou ano..." 
+                    placeholder="Busque por projeto ou aluno..." 
                     className='imputSearchP'
                 />
-                
-                <div className="divBtn">
-                    <button onClick={onSearch} className="btnSearch">
-                        Pesquisar
-                    </button>
-                </div>
+        
             </div>
         </div>
     );

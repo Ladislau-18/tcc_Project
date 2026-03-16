@@ -10,15 +10,13 @@ $word = isset($_GET['q']) ? $_GET['q'] : '';
 $busca = "%".$word."%";
 $buscaAno = $word;
 
-$sql = "SELECT t.titulo, c.nome, t.autorNome,  t.anoDefesa, t.orientadorNome, c.areaFormacao FROM tccs t
+$sql = "SELECT t.titulo, t.autorNome FROM tccs t
         INNER JOIN cursos c
         ON t.idCurso = c.idCurso
         WHERE t.titulo LIKE '$busca'
         OR t.autorNome LIKE '$busca'
-        OR t.anoDefesa LIKE '$buscaAno'
-        OR c.nome LIKE '$busca'
-        OR t.orientadorNome LIKE '$busca'
-        or c.areaFormacao LIKE '$busca';";
+      
+        ";
 
 $result = mysqli_query($connection, $sql);
 

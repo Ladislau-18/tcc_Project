@@ -3,7 +3,6 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    border: 1px solid red;
 }
 .searchContainer{
     background-color: var(--cor-primaria);
@@ -12,18 +11,26 @@
     align-items: center;
     width: auto;
     height: auto;
-    padding: 15px ;
     border-radius: 10px;
     margin-bottom: 20px;
-    border: 1px solid rgb(55, 0, 255);
+    border: 1px solid var(--cor-primaria);
+    
 
 }
 
+.divIcon{
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .imputSearch{
-    width: 800px;
+    width: 400px;
     padding: 10px;
     border: 1px solid var(--fundo-claro);
-    border-radius: 25px ;
+    border-radius: 25px;
     cursor: pointer;
     
 }

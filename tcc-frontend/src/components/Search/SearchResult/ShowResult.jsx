@@ -1,27 +1,28 @@
 import { TccCard } from '../goSearch/goSearch';
 import { SearchNotFoundIcon } from '../../../assets/icons';
+import CircleLoad from '../../common/CircleLoad';
 import './showResult.css';
 
 
-function ShowResult ({ items, loading, hasSearched }){
+function ShowResult ({ items, loading, query }){
 
-
-    if (!hasSearched) {
+    // Se estiver a carregar, mostra apenas a mensagem de espera
+    if (loading) {
         return (
-            <div className="status-msg">
-                <h2>Faça uma pesquisa para ver os resultados</h2>
+            <div className="loader-container">
+                <CircleLoad mensagem="Consultando o acervo..." />
             </div>
-        );
+        )
     }
-    if (loading) return <p className="status-msg">Pesquisando...</p>;
     
-    if (!items || !Array.isArray(items) || items.length === 0) {
+    
+    if (!items || items.length === 0) {
         return (
-            <div className='divTccNotFound' >
+            <div className='divTccNotFound'>
                 <div className='tccNotFound'>
                     <SearchNotFoundIcon />
-                    <h1>Nenhum ítem encontrado</h1>
-                    <p><strong>Tente mudar as palavras chaves</strong></p>
+                    <h1>Nenhum item encontrado</h1>
+                    <p>Não existem relatórios para "<strong>{query}</strong>"</p>
                 </div>
             </div>
         );
@@ -29,16 +30,25 @@ function ShowResult ({ items, loading, hasSearched }){
     
     return (
         <div className="resultsContainer">
-            <h2>Resultado da pesquisa</h2>
+            {/* Título Dinâmico com Contador */}
+            <div className="results-header">
+                <p><strong>{items.length}</strong> {items.length === 1 ? 'Resultado encontrado' : 'Resultados encontrados'}</p>
+             
+                
+                
+            </div>
+
             <div className="tccResults">
                 {items.map((tcc, index) => (
-                   <TccCard key={tcc.id || index} tcc={tcc}/>
-                    
+                   <TccCard key={tcc.idTcc || index} tcc={tcc}/>
                 ))}
             </div>
         </div>
     );
 };
+
+   
+
 
 
 export default ShowResult;

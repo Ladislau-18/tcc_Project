@@ -47,8 +47,8 @@ function Home() {
 
   return (
     <>
-    <h1>Dashboard Administrativo</h1>
-    <p><strong>Visão geral do sistema e dados estatísticos.</strong></p>
+    <h1>Visão Geral</h1>
+    <p><strong>Dashboard do sistema e dados estatísticos.</strong></p>
         <DashInfo  dados={dados} graphData={graphData}/>
     </>
   );
