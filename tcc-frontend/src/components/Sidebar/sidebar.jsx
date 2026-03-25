@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { HomeIcon, UserIcon, SearchIcon, RegistIcon, CatalogIcon } from "../../assets/icons";
+import { HomeIcon, UserIcon, SearchIcon, RegistIcon, Statistics, CatalogIcon } from "../../assets/icons";
 
 import '../Sidebar/sidebar.css';
 const Sidebar = (props) =>{
@@ -9,8 +9,8 @@ const Sidebar = (props) =>{
     const goSearch = () => {
         navigate("/pages/pesquisar");
     };
-    const goProfile = () => {
-        navigate("/pages/perfil");
+    const goStatistics = () => {
+        navigate("/pages/statistics");
     };
     const goHome = () => {
         navigate("/pages/home");
@@ -29,10 +29,10 @@ const Sidebar = (props) =>{
             <nav>
                 
                 <div onClick={goHome}> <HomeIcon /> Dashboard</div>
-                <div onClick={goProfile}> <UserIcon /> Perfil</div>
                 <div onClick={goSearch}> <SearchIcon /> Pesquisar</div>
                 <div onClick={goRegist}> <RegistIcon /> Registar TCC</div>
-                <div onClick={goCatalog}> <CatalogIcon /> Catálogo de TCCs</div>
+                <div onClick={goStatistics}> <Statistics /> Análise Acadêmica</div>
+                <div onClick={goCatalog}> <CatalogIcon /> Registo de actividade</div>
                 
 
             </nav>

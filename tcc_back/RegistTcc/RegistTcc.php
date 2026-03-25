@@ -1,84 +1,110 @@
 <?php
-
-error_reporting(0); 
-ini_set('display_errors', 0);
+include_once("../config.php");
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit;
-
-$conn = new mysqli("localhost", "root", "", "acervo_tcc");
-
-if ($conn->connect_error) {
-    echo json_encode(["sucesso" => false, "mensagem" => "Falha na conexão: " . $conn->connect_error]);
+if ($connection->connect_error) {
+    echo json_encode(["sucesso" => false, "mensagem" => "Falha na conexão: " . $connection->connect_error]);
     exit;
 }
 
 $dadosInput = json_decode(file_get_contents("php://input"), true);
 
 if (!$dadosInput) {
-    echo json_encode(["sucesso" => false, "mensagem" => "Dados nao recebidos"]);
+    echo json_encode(["sucesso" => false, "mensagem" => "Dados não recebidos"]);
     exit;
 }
 
+// Iniciamos uma transação para garantir que tudo corra bem ou nada seja salvo
+$connection->begin_transaction();
+
 try {
-    //Converter a data/hora do React para o formato do MySQL
+    // 1. Preparar a Data
     $dataRaw = $dadosInput['dataRegistro'];
     $dataMySQL = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $dataRaw)));
 
-    //Inserir Localização
-    $stmtLocal = $conn->prepare("INSERT INTO locaisArmazenamento (blocoArquivo, estante, prateleira, compartimento) VALUES (?, ?, ?, ?)");
+    // 2. Inserir Localização
+    $stmtLocal = $connection->prepare("INSERT INTO locaisArmazenamento (blocoArquivo, estante, prateleira, compartimento) VALUES (?, ?, ?, ?)");
     $bloco = $dadosInput['andar'];
     $estante = "Sala " . $dadosInput['sala'];
     $prateleira = $dadosInput['prateleira'];
     $comp = $dadosInput['armario'];
-    
     $stmtLocal->bind_param("ssss", $bloco, $estante, $prateleira, $comp);
     $stmtLocal->execute();
-    $idLocal = $conn->insert_id;
+    $idLocal = $connection->insert_id;
 
-    // Buscar ID do Curso
-    $stmtC = $conn->prepare("SELECT idCurso FROM cursos WHERE nome = ? LIMIT 1");
+    // 3. Buscar ID do Curso
+    $stmtC = $connection->prepare("SELECT idCurso FROM cursos WHERE nome = ? LIMIT 1");
     $stmtC->bind_param("s", $dadosInput['curso']);
     $stmtC->execute();
-    $res = $stmtC->get_result();
-    $curso = $res->fetch_assoc();
-    $idCurso = $curso ? $curso['idCurso'] : 1;
+    $idCurso = ($res = $stmtC->get_result()->fetch_assoc()) ? $res['idCurso'] : 1;
 
-    // Inserir TCC/Relatório
-    $stmtTcc = $conn->prepare("INSERT INTO tccs (titulo, autorNome, orientadorNome, anoDefesa, idCurso, idLocal) VALUES (?, ?, ?, ?, ?, ?)");
+    // 4. Inserir TCC/Relatório (Removido autorNome, Adicionado tipo_projeto)
+    $stmtTcc = $connection->prepare("INSERT INTO tccs (titulo, orientadorNome, anoDefesa, idCurso, idLocal, tipo_projeto) VALUES (?, ?, ?, ?, ?, ?)");
     $ano = intval($dadosInput['anoDefesa']);
+    $tipoProjeto = count($dadosInput['autores']) > 1 ? 'Grupo' : 'Individual';
     
-    $stmtTcc->bind_param("sssiii", 
+    $stmtTcc->bind_param("ssiiis", 
         $dadosInput['titulo'], 
-        $dadosInput['autor'], 
         $dadosInput['orientador'], 
         $ano, 
         $idCurso, 
-        $idLocal
+        $idLocal,
+        $tipoProjeto
     );
+    $stmtTcc->execute();
+    $idTccNovo = $connection->insert_id;
 
-    if ($stmtTcc->execute()) {
-        $idTccNovo = $conn->insert_id;
+    // 5. LÓGICA DE AUTORES COM VALIDAÇÃO DE "RELATÓRIO ÚNICO"
+    $listaAutores = $dadosInput['autores']; 
 
-        // Inserir no Histórico com a Data e Hora
-        $stmtHist = $conn->prepare("INSERT INTO historicoMovimentacao (idTcc, idUtilizador, dataAcao, tipoAcao) VALUES (?, ?, ?, 'Cadastro de Relatório')");
-        $idUtilizadorLogado = 1; // Substituir pelo ID real do utilizador logado no futuro (apenas testando...)
-        
-        $stmtHist->bind_param("iis", $idTccNovo, $idUtilizadorLogado, $dataMySQL);
-        $stmtHist->execute();
+    foreach ($listaAutores as $nomeAutor) {
+        $nomeAutor = trim($nomeAutor);
 
-        echo json_encode(["sucesso" => true, "mensagem" => "Relatório e histórico registados com sucesso!"]);
-    } else {
-        echo json_encode(["sucesso" => false, "mensagem" => "Erro no banco: " . $conn->error]);
+        //Verificar se este nome já existe (se sim, não poderá ser cadastrado.)
+        $stmtVerif = $connection->prepare("SELECT idAluno FROM alunos WHERE nome = ? LIMIT 1");
+        $stmtVerif->bind_param("s", $nomeAutor);
+        $stmtVerif->execute();
+        $resAluno = $stmtVerif->get_result()->fetch_assoc();
+
+        if ($resAluno) {
+            $idAluno = $resAluno['idAluno'];
+            
+            // Validação de segurança: Aluno só pode ter 1 TCC
+            $stmtCheckLink = $connection->prepare("SELECT idTcc FROM tcc_autores WHERE idAluno = ? LIMIT 1");
+            $stmtCheckLink->bind_param("i", $idAluno);
+            $stmtCheckLink->execute();
+            if ($stmtCheckLink->get_result()->fetch_assoc()) {
+                throw new Exception("O aluno '$nomeAutor' já está associado a outro relatório.");
+            }
+        } else {
+            // Cria o aluno APENAS com o nome 
+            $stmtNovo = $connection->prepare("INSERT INTO alunos (nome) VALUES (?)");
+            $stmtNovo->bind_param("s", $nomeAutor);
+            $stmtNovo->execute();
+            $idAluno = $connection->insert_id;
+        }
+
+        // Vincula ao/s autor/es
+        $stmtPonte = $connection->prepare("INSERT INTO tcc_autores (idTcc, idAluno) VALUES (?, ?)");
+        $stmtPonte->bind_param("ii", $idTccNovo, $idAluno);
+        $stmtPonte->execute();
     }
 
+    //Inserir no Histórico 
+    $stmtHist = $connection->prepare("INSERT INTO historicoMovimentacao (idTcc, idUtilizador, dataAcao, tipoAcao) VALUES (?, ?, ?, 'Cadastro de Relatório')");
+    $idUtilizadorLogado = 1; 
+    $stmtHist->bind_param("iis", $idTccNovo, $idUtilizadorLogado, $dataMySQL);
+    $stmtHist->execute();
+
+    $connection->commit();
+    echo json_encode(["sucesso" => true, "mensagem" => "Relatório registado com sucesso!"]);
+
 } catch (Exception $e) {
+    $connection->rollback();
     echo json_encode(["sucesso" => false, "mensagem" => "Erro interno: " . $e->getMessage()]);
 }
 
-$conn->close();
+$connection->close();
 ?>

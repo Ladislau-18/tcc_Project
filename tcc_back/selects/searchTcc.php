@@ -8,16 +8,23 @@ $word = isset($_GET['q']) ? $_GET['q'] : '';
 
 /*Preparando a palavra para a pesquisa no SQL com os '%'*/
 $busca = "%".$word."%";
-$buscaAno = $word;
 
-$sql = "SELECT t.titulo, t.autorNome FROM tccs t
-        INNER JOIN cursos c
-        ON t.idCurso = c.idCurso
-        WHERE t.titulo LIKE '$busca'
-        OR t.autorNome LIKE '$busca'
-      
-        ";
+$sql = "SELECT 
+    t.idTcc,
+    t.titulo, 
+    c.nome, 
+    t.anoDefesa,
+    GROUP_CONCAT(al.nome) AS autores 
+    FROM tccs t
 
+    LEFT JOIN cursos c ON t.idCurso = c.idCurso
+    LEFT JOIN tcc_autores ta ON t.idTcc = ta.idTcc
+    LEFT JOIN alunos al ON ta.idAluno = al.idAluno
+    
+    WHERE t.titulo LIKE '$busca'
+    OR c.nome LIKE '$busca'
+    GROUP BY t.idTcc;";
+    
 $result = mysqli_query($connection, $sql);
 
 $tccs = [];
@@ -29,3 +36,5 @@ if ($result){
 }
 
 echo json_encode($tccs);
+
+?>

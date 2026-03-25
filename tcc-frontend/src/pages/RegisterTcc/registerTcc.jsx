@@ -1,63 +1,73 @@
 import "./registerTcc.css";
 import { FileIcon, LocationIcon } from "../../assets/icons";
+//import { Plus, Trash2 } from "lucide-react"; // Importe ícones para o + e lixo
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { CancelAuthor } from "../../assets/icons";
 
-function RegisterTcc (){
-
-    // 1. Estado para armazenar os dados do formulário
+function RegisterTcc() {
+    // 1. Estado para dados fixos e ARRAY para autores
     const [formData, setFormData] = useState({
-        titulo: '', autor: '', orientador: '', areaFormacao: '', 
+        titulo: '', orientadorNome: '', areaFormacao: '', 
         curso: '', anoDefesa: '', nota: '',
         andar: '', sala: '', armario: '', prateleira: ''
     });
 
-    // 2. Estado para controlar a visibilidade do Modal
+    const [autores, setAutores] = useState(['']); // Começa com um autor vazio
     const [showModal, setShowModal] = useState(false);
-
-    // 3. Captura a data atual do computador
     const dataHoraAtual = new Date().toLocaleString('pt-PT');
 
-    // Função para atualizar os dados enquanto o usuário digita
+    // Funções para gerir autores dinâmicos
+    const handleAutorChange = (index, value) => {
+        const novosAutores = [...autores];
+        novosAutores[index] = value;
+        setAutores(novosAutores);
+    };
+
+    const adicionarAutor = () => setAutores([...autores, '']);
+    
+    const removerAutor = (index) => {
+        const novosAutores = autores.filter((_, i) => i !== index);
+        setAutores(novosAutores);
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Função que abre o modal ao clicar em "Visualizar"
     const handlePreview = (e) => {
         e.preventDefault();
         setShowModal(true);
     };
 
-    // Função que seria chamada para enviar ao PHP (Registar)
     const handleFinalRegister = async () => {
-    // Unindo os dados do formulário com a data automática
-    const dadosParaEnviar = { ...formData, dataRegistro: dataHoraAtual };
+        // Unindo tudo para enviar ao PHP
+        const dadosParaEnviar = { 
+            ...formData, 
+            autores: autores, // Enviando o array de nomes
+            dataRegistro: dataHoraAtual 
+        };
 
-    try {
-        const resposta = await fetch("http://localhost/TCC_PROJETO/tcc_back/RegistTcc/RegistTcc.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dadosParaEnviar),
-        });
+        try {
+            const resposta = await fetch("http://localhost/TCC_PROJETO/tcc_back/RegistTcc/RegistTcc.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dadosParaEnviar),
+            });
 
-        const resultado = await resposta.json();
+            const resultado = await resposta.json();
 
-        if (resultado.sucesso) {
-            toast.success("Sucesso: " + resultado.mensagem);
-            setShowModal(false);
-            // Opcional: limpar o formulário ou redirecionar
-        } else {
-            toast.error("Erro: " + resultado.mensagem);
+            if (resultado.sucesso) {
+                toast.success(resultado.mensagem);
+                setShowModal(false);
+            } else {
+                toast.error(resultado.mensagem);
+            }
+        } catch (erro) {
+            toast.error("Erro na conexão com o servidor");
         }
-    } catch (erro) {
-        console.error(erro);
-        toast.error("Erro na conexão com o servidor");
-    }
-};
+    };
 
     return (
         <div className="register-page-container">
@@ -76,18 +86,40 @@ function RegisterTcc (){
                             <input type="text" name="titulo" placeholder=" " required onChange={handleChange} />
                             <label>Título</label>
                         </div><br />
+
                         <div className="gridInput">
+                            {/* SEÇÃO DINÂMICA DE AUTORES */}
+                        <div className="autores-section">
+                            {autores.map((nome, index) => (
+                                <div key={index} className="inputContainer autor-item" style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px'}}>
+                                    <div className="inputContainer" >
+                                        <input 
+                                            type="text" 
+                                            placeholder=" " 
+                                            required 
+                                            value={nome}
+                                            onChange={(e) => handleAutorChange(index, e.target.value)} 
+                                        />
+                                        <label>Autor {index + 1}</label>
+                                    </div>
+                                    {autores.length > 1 && (
+                                        <button type="button" onClick={() => removerAutor(index)} className="btn-remove-autor">
+                                            <CancelAuthor />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                            <button type="button" onClick={adicionarAutor} className="btn-add-autor">
+                                {/*<Plus size={16} />*/} Adicionar mais um autor
+                            </button>
+                        </div>
                             <div className="inputContainer">
-                                <input type="text" name="autor" placeholder=" " required onChange={handleChange} />
-                                <label>Autor</label>
-                            </div>
-                            <div className="inputContainer">
-                                <input type="text" name="orientador" placeholder=" " required onChange={handleChange} />
+                                <input type="text" name="orientadorNome" placeholder=" " required onChange={handleChange} />
                                 <label>Orientador</label>
                             </div>
                             {/* Selects com as opções que já definiu */}
                             <div className="inputContainer">
-                                <select name="area" required onChange={handleChange}>
+                                <select name="areaFormacao" required onChange={handleChange}>
                                     <option value="" hidden></option>
                                     <option value="Informática">Informática</option>
                                 </select>
@@ -102,7 +134,7 @@ function RegisterTcc (){
                                 <label>Curso</label>
                             </div>
                             <div className="inputContainer">
-                                <select name="Ano" required onChange={handleChange}>
+                                <select name="anoDefesa" required onChange={handleChange}>
                                     <option value="" hidden></option>
                                     <option value="2020">2020</option>
                                     <option value="2021">2021</option>
@@ -115,7 +147,7 @@ function RegisterTcc (){
                                 <label>Ano da Defesa</label>
                             </div>
                             <div className="inputContainer">
-                                <select name="Nota final" required onChange={handleChange}>
+                                <select name="nota" required onChange={handleChange}>
                                     <option value="" hidden></option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -138,7 +170,7 @@ function RegisterTcc (){
                                     <option value="19">19</option>
                                     <option value="20">20</option>                      
                                 </select>
-                                <label>Ano da Defesa</label>
+                                <label>Nota Final</label>
                             </div>
                         </div>
                     </div>
@@ -199,15 +231,15 @@ function RegisterTcc (){
             {/* MODAL DE PRÉ-VISUALIZAÇÃO (OVERLAY) */}
             {showModal && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
-                        <header className="modal-header">
+                    <div className="modal-">
+                        <header className="modalHeader">
                             <h2>Confirmar Registo</h2>
                             
                         </header>
                         
                         <div className="preview-body">
                             <p><strong>Título:</strong> {formData.titulo}</p>
-                            <p><strong>Autor:</strong> {formData.autorNome}</p>
+                            <p><strong>Autor:</strong> {autores.join(" | ")}</p>
                             <p><strong>Orientador:</strong> {formData.orientadorNome}</p>
                             <p><strong>Área de formação:</strong> {formData.areaFormacao}</p>
                             <p><strong>Curso:</strong> {formData.curso}</p>

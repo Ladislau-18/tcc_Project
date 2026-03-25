@@ -4,8 +4,9 @@ import CircleLoad from '../../common/CircleLoad';
 import './showResult.css';
 
 
-function ShowResult ({ items, loading, query }){
+function ShowResult({tcc, items, loading, query, onDeleteClick }) {
 
+    const safeItems = Array.isArray(items) ? items : [];
     // Se estiver a carregar, mostra apenas a mensagem de espera
     if (loading) {
         return (
@@ -14,8 +15,8 @@ function ShowResult ({ items, loading, query }){
             </div>
         )
     }
-    
-    
+
+
     if (!items || items.length === 0) {
         return (
             <div className='divTccNotFound'>
@@ -27,27 +28,27 @@ function ShowResult ({ items, loading, query }){
             </div>
         );
     }
-    
+
     return (
         <div className="resultsContainer">
             {/* Título Dinâmico com Contador */}
             <div className="results-header">
                 <p><strong>{items.length}</strong> {items.length === 1 ? 'Resultado encontrado' : 'Resultados encontrados'}</p>
-             
-                
-                
+
+
+
             </div>
 
             <div className="tccResults">
                 {items.map((tcc, index) => (
-                   <TccCard key={tcc.idTcc || index} tcc={tcc}/>
+                    <TccCard  key={tcc.idTcc || index} tcc={tcc} onDelete={onDeleteClick}/>
                 ))}
             </div>
         </div>
     );
 };
 
-   
+
 
 
 

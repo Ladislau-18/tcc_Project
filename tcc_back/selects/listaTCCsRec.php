@@ -3,21 +3,28 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
 // 1. Conexão
-$conn = new mysqli("localhost", "root", "", "acervo_tcc");
+include_once("../config.php");
 
-if ($conn->connect_error) {
+if ($connection->connect_error) {
     echo json_encode(["erro" => "Conexão falhou"]);
     exit;
 }
 
 // 2. Query "Amigável"
 // O LEFT JOIN não esconde o TCC se o curso não for encontrado
-$sql = "SELECT t.*, c.nome as curso 
-        FROM tccs t 
-        LEFT JOIN cursos c ON t.idCurso = c.idCurso 
-        ORDER BY t.idTcc DESC";
+$sql = "SELECT 
+            t.idTcc, t.titulo, t.anoDefesa, c.nome as curso,
+            GROUP_CONCAT(al.nome SEPARATOR ' | ') AS autores 
+        FROM tccs t
+        LEFT JOIN cursos c ON t.idCurso = c.idCurso
+        LEFT JOIN tcc_autores ta ON t.idTcc = ta.idTcc
+        LEFT JOIN alunos al ON ta.idAluno = al.idAluno
+        GROUP BY t.idTcc
+        ORDER BY t.idTcc DESC ";
 
-$result = $conn->query($sql);
+
+
+$result = $connection->query($sql);
 $dados = [];
 
 if ($result) {
@@ -32,7 +39,7 @@ if ($result) {
 
 // 3. Resposta
 echo json_encode($dados);
-$conn->close();
+$connection->close();
 ?>
 
 

@@ -4,8 +4,8 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Home from './pages/Home/home';
 import SearchPage from './pages/searchTCC/pesquisar';
+import StatsData from "./pages/statistics/statistics";
 import Layout from './components/Layout/layout';
-import Profile from './pages/perfilUser/perfil'
 import Catalog from './pages/catalog/catalog'
 import RegisterTcc from './pages/RegisterTcc/registerTcc';
 
@@ -22,7 +22,7 @@ function App() {
         <Route element={<Layout />}> 
           <Route path="/pages/home" element={<Home />} />
           <Route path="/pages/pesquisar" element={<SearchPage />} />
-          <Route path="/pages/perfil" element={<Profile />} />
+          <Route path="/pages/statistics" element={<StatsData />} />
           <Route path="/pages/catalog" element={<Catalog />} />
           <Route path="/pages/registerTcc" element={<RegisterTcc />} />
           

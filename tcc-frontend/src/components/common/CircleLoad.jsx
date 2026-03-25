@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const CircleLoad = ({ mensagem = "Carregando..." }) => {
     return (
         <div className="loader-container">
@@ -8,5 +9,6 @@ const CircleLoad = ({ mensagem = "Carregando..." }) => {
         </div>
     );
 }
+
 
 export default CircleLoad;
