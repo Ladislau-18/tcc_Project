@@ -4,47 +4,49 @@ import SearchBar from "../../components/Search/SearchBar/searchBar";
 import ShowResult from "../../components/Search/SearchResult/ShowResult";
 import toast from "react-hot-toast";
 import DeleteModal from "../../components/common/divConfirmDelete";
+import ModalDetailsTcc from "../../components/Modal/ModalDetalhesTcc"; 
 
 function SearchPage() {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // Estados para os Modais
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [tccSelecionado, setTccSelecionado] = useState(null);
 
-    // 1. Crie os estados para o modal
-    const [showModal, setShowModal] = useState(false);
-    const [tccParaApagar, setTccParaApagar] = useState(null);
-
-    // 2. Função para abrir o modal
-    const confirmarExclusao = (tcc) => {
-        setTccParaApagar(tcc);
-        setShowModal(true);
+    // Abrir apenas os detalhes
+    const visualizarDetalhes = (tcc) => {
+        setTccSelecionado(tcc);
+        setShowDetailsModal(true);
     };
 
-    // 3. Função que chama o PHP de fato 
+    // Abrir a confirmação de exclusão (pode ser chamado do card ou de dentro do modal de detalhes)
+    const confirmarExclusao = (tcc) => {
+        setTccSelecionado(tcc);
+        setShowDeleteModal(true);
+    };
+
     const handleConfirmDelete = async () => {
         try {
-            await axios.delete(`http://localhost/TCC_PROJETO/tcc_back/DeleteTcc/delTcc.php?id=${tccParaApagar.idTcc}`);
+            await axios.delete(`http://localhost/TCC_PROJETO/tcc_back/DeleteTcc/delTcc.php?id=${tccSelecionado.idTcc}`);
 
-            // Atualiza a lista na tela removendo o item apagado
-            setResults(prev => prev.filter(item => item.idTcc !== tccParaApagar.idTcc));
+            setResults(prev => prev.filter(item => item.idTcc !== tccSelecionado.idTcc));
 
-            setShowModal(false);
-            toast.success("Relatório removido!");
+            // Fecha ambos para garantir que a tela limpe
+            setShowDeleteModal(false);
+            setShowDetailsModal(false);
+            
+            toast.success("Relatório removido com sucesso!");
         } catch (error) {
             toast.error("Erro ao apagar o relatório");
         }
     };
 
-
-
-
-    //Disparar a busca sempre que a 'query' mudar
     useEffect(() => {
         const buscarNoAcervo = async () => {
             setLoading(true);
-
-            //promisse que espera algum tempo antes de chamar o "ReLoad"
             const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
             try {
@@ -58,8 +60,6 @@ function SearchPage() {
                     esperar(1000)
                 ]);
                 setResults(response.data);
-
-
             } catch (error) {
                 console.error("Erro na busca:", error);
                 setResults([]);
@@ -79,22 +79,36 @@ function SearchPage() {
         <>
             <h1>Pesquisar Relatórios</h1>
             <p><strong>Explore e consulte todos os relatórios do sistema</strong></p>
+            
             <SearchBar
                 query={query}
                 setQuery={setQuery}
                 onSearch={() => { }}
             />
+
             <ShowResult 
                 items={results} 
                 onDeleteClick={confirmarExclusao} 
+                onDetailsClick={visualizarDetalhes} // Nova prop para ver detalhes
                 loading={loading} 
-                query={query} />
+                query={query} 
+            />
 
+            {/* Modal de Detalhes - Fica por baixo se o de delete abrir */}
+            <ModalDetailsTcc
+                show={showDetailsModal} 
+                tcc={tccSelecionado}
+                onClose={() => setShowDetailsModal(false)}
+                onDelete={confirmarExclusao} // Chama o delete por cima
+                onEdit={(tcc) => console.log("Editar:", tcc)}
+            />
+
+            {/* Modal de Confirmação de Exclusão - Z-index deve ser maior */}
             <DeleteModal
-                show={showModal}
-                onCancel={() => setShowModal(false)}
+                show={showDeleteModal}
+                onCancel={() => setShowDeleteModal(false)}
                 onConfirm={handleConfirmDelete}
-                tccTitulo={tccParaApagar ? tccParaApagar.titulo : ''}
+                tccTitulo={tccSelecionado ? tccSelecionado.titulo : ''}
             />
         </>
     );

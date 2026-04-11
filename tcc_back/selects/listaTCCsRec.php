@@ -13,7 +13,10 @@ if ($connection->connect_error) {
 // 2. Query "Amigável"
 // O LEFT JOIN não esconde o TCC se o curso não for encontrado
 $sql = "SELECT 
-            t.idTcc, t.titulo, t.anoDefesa, c.nome as curso,
+            t.idTcc, 
+            t.titulo, 
+            t.anoDefesa, 
+            c.nome as curso, 
             GROUP_CONCAT(al.nome SEPARATOR ' | ') AS autores 
         FROM tccs t
         LEFT JOIN cursos c ON t.idCurso = c.idCurso

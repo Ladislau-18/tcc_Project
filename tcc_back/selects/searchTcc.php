@@ -12,17 +12,22 @@ $busca = "%".$word."%";
 $sql = "SELECT 
     t.idTcc,
     t.titulo, 
-    c.nome, 
+    c.nome AS curso, 
+    t.orientadorNome,
+    c.areaFormacao, 
     t.anoDefesa,
-    GROUP_CONCAT(al.nome) AS autores 
+    t.notaFinal,
+    t.blocoArquivo, 
+    t.armario, 
+    t.prateleira,
+    GROUP_CONCAT(al.nome SEPARATOR ', ') AS autores 
     FROM tccs t
-
     LEFT JOIN cursos c ON t.idCurso = c.idCurso
     LEFT JOIN tcc_autores ta ON t.idTcc = ta.idTcc
     LEFT JOIN alunos al ON ta.idAluno = al.idAluno
-    
     WHERE t.titulo LIKE '$busca'
     OR c.nome LIKE '$busca'
+    OR al.nome LIKE '$busca'
     GROUP BY t.idTcc;";
     
 $result = mysqli_query($connection, $sql);

@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 /* A caixa do modal em si */
@@ -17,14 +17,13 @@
   width: 90%;
   max-width: 500px;
   border-radius: 8px;
-  padding: 20px 10px;
+  padding: 10px 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  animation: fadeIn 0.3s ease-out; /* Pequena animação de entrada */
+  animation: fadeIn 0.3s ease-out; 
 }
 
 .modalHeader {
-  
   color: var(--cor-primaria);
 }
 
@@ -34,19 +33,19 @@
 }
 
 .modalBody {
-  padding: 20px;
+  padding: 0px 20px;
   color: var(--texto-escuro);
 }
 
-.tcc-titulo-modal {
+.tccTituloModal {
   font-weight: bold;
   font-style: italic;
-  margin: 10px 0;
+  margin: 5px 0;
   color: var(--texto-escuro);
 }
 
 .aviso-exclusao {
-  color: #e74c3c; /* Vermelho para alerta */
+  color: #e74c3c;
   font-size: 0.9rem;
   margin-top: 15px;
 }
@@ -57,7 +56,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  border-top: 1px solid #eee;
+  border-top: 2px solid var(--cor-primaria);
 }
 
 /* Botões do Modal */

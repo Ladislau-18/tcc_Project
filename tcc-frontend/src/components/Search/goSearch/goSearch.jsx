@@ -5,49 +5,54 @@ import './goSearch.css';
 
 
 
-function TccCard({ tcc, onDelete, onCancel }) {
+function TccCard({ tcc, onDelete, onDetails, onEdit }) {
 
   const listaAutores = tcc.autores ? tcc.autores.replaceAll(',', ' | ') : "Autor por definir";
 
 
   return (
-    <div key={tcc.idTcc} className='itenTcc'>
-      <div className="icon">
+    <div className='itemTcc'>
+      <div className="iconContainer">
         <FileIcon className="iconTcc" />
       </div>
-      <div className="cardTccInfo">
 
-        <div className="nameActions">
+      <div className="cardTccInfo" >
+        <div className="nameActions" >
+          <span className="autoresTexto">{listaAutores}</span>
 
-          {listaAutores}
-
-          <div className="divBtnActions">
-            <div className='iconAction1'>
-              <EditTcc onClick={() => onCancel()} />
+          <div className="divBtnActions" style={{border:"1 px solid red"}}>
+            {/* Ícone de Editar */}
+            <div className='iconAction1' onClick={(e) => { 
+                e.stopPropagation(); 
+                onEdit(tcc); 
+            }}>
+              <EditTcc />
             </div>
 
+            {/* Ícone de Apagar (Direto para o modal de confirmação) */}
             <div className='iconAction2' onClick={(e) => {
-                  e.stopPropagation(); 
-                  onDelete(tcc);
-                }}>
-              < DeleteTcc
-                 />
+                e.stopPropagation();
+                onDelete(tcc);
+            }}>
+              <DeleteTcc />
             </div>
 
-            <button className="btnTccDect">Ver detalhes</button>
+            {/* Botão Ver Detalhes (Abre o modal de informações) */}
+            <button 
+              className="btnTccDet" 
+              onClick={() => onDetails(tcc)}
+            >
+              Ver detalhes
+            </button>
           </div>
-
         </div>
-
 
         <h5>{tcc.titulo}</h5>
         <div className="infoCard">{tcc.curso}</div>
         <div className="infoCard">{tcc.anoDefesa}</div>
-
       </div>
     </div>
-  )
+  );
 }
-
 
 export { TccCard };

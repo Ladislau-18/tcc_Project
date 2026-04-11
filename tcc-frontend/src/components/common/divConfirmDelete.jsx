@@ -13,7 +13,7 @@ function DeleteModal({ show, onCancel, onConfirm, tccTitulo }) {
         </div>
         <div className="modalBody">
           <p>Tem certeza que deseja apagar o relatório:</p>
-          <p className="tcc-titulo-modal">"{tccTitulo}"?</p>
+          <p className="tccTituloModal">"{tccTitulo}"?</p>
           <p className="aviso-exclusao">Esta ação não pode ser desfeita.</p>
         </div>
         <div className="modalFooter">

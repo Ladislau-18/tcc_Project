@@ -28,7 +28,7 @@ CREATE TABLE `alunos` (
   `idAluno` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`idAluno`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `historicomovimentacao` (
   KEY `fk_HistTser` (`idUtilizador`),
   CONSTRAINT `fk_HistTcc` FOREIGN KEY (`idTcc`) REFERENCES `tccs` (`idTcc`) ON DELETE CASCADE,
   CONSTRAINT `fk_HistTser` FOREIGN KEY (`idUtilizador`) REFERENCES `utilizadores` (`idUtilizador`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +81,7 @@ CREATE TABLE `locaisarmazenamento` (
   `prateleira` varchar(20) NOT NULL,
   `compartimento` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idLocal`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +140,7 @@ CREATE TABLE `tccs` (
   KEY `fk_TccLocal` (`idLocal`),
   CONSTRAINT `fk_TccCurso` FOREIGN KEY (`idCurso`) REFERENCES `cursos` (`idCurso`) ON DELETE CASCADE,
   CONSTRAINT `fk_TccLocal` FOREIGN KEY (`idLocal`) REFERENCES `locaisarmazenamento` (`idLocal`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,7 @@ CREATE TABLE `utilizadores` (
   PRIMARY KEY (`idUtilizador`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `numProcesso` (`numProcesso`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -172,4 +172,4 @@ CREATE TABLE `utilizadores` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-19 17:39:44
+-- Dump completed on 2026-04-11 20:06:19 
