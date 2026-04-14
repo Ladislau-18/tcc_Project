@@ -16,7 +16,7 @@ const Sidebar = (props) =>{
         navigate("/pages/home");
     };
     const goCatalog = () => {
-        navigate("/pages/catalog");
+        navigate("/pages/historicMov");
     };
     const goRegist = () => {
         navigate("/pages/registerTcc");

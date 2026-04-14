@@ -47,8 +47,10 @@ function Home() {
 
   return (
     <>
+    <div className="logsHeader">
     <h1>Visão Geral</h1>
     <p><strong>Dashboard do sistema e dados estatísticos.</strong></p>
+    </div> 
         <DashInfo  dados={dados} graphData={graphData}/>
     </>
   );

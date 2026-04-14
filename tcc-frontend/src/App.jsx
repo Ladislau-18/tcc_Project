@@ -6,7 +6,7 @@ import Home from './pages/Home/home';
 import SearchPage from './pages/searchTCC/pesquisar';
 import StatsData from "./pages/statistics/statistics";
 import Layout from './components/Layout/layout';
-import Catalog from './pages/catalog/catalog'
+import HistoricMov from './pages/historicMov/historicMov'
 import RegisterTcc from './pages/RegisterTcc/registerTcc';
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
           <Route path="/pages/home" element={<Home />} />
           <Route path="/pages/pesquisar" element={<SearchPage />} />
           <Route path="/pages/statistics" element={<StatsData />} />
-          <Route path="/pages/catalog" element={<Catalog />} />
+          <Route path="/pages/historicMov" element={<HistoricMov />} />
           <Route path="/pages/registerTcc" element={<RegisterTcc />} />
           
         </Route>
