@@ -42,18 +42,30 @@ function RegisterTcc() {
     };
 
     const handleFinalRegister = async () => {
-        // Unindo tudo para enviar ao PHP
-        const dadosParaEnviar = {
+        // 1. Pegar o utilizador do sessionStorage (como fizemos na Pesquisa/Home)
+        const userStorage = sessionStorage.getItem('user');
+        
+        if (!userStorage) {
+            toast.error("Sessão expirada. Por favor, faça login novamente.");
+            return;
+        }
+
+        const userObj = JSON.parse(userStorage);
+        const userId = userObj.id; // Usando 'id' que é como está no teu storage
+
+        // 2. Unindo tudo para enviar ao PHP (incluindo o userId)
+        const enviarDados = {
             ...formData,
-            autores: autores, // Enviando o array de nomes
-            dataRegistro: dataHoraAtual
+            autores: autores,
+            dataRegistro: dataHoraAtual,
+            userId: userId // <-- Adicionamos esta linha aqui
         };
 
         try {
             const resposta = await fetch("http://localhost/TCC_PROJETO/tcc_back/RegistTcc/RegistTcc.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(dadosParaEnviar),
+                body: JSON.stringify(enviarDados),
             });
 
             const resultado = await resposta.json();
@@ -61,6 +73,7 @@ function RegisterTcc() {
             if (resultado.sucesso) {
                 toast.success(resultado.mensagem);
                 setShowModal(false);
+                // Opcional: Limpar o formulário após sucesso
             } else {
                 toast.error(resultado.mensagem);
             }
@@ -70,7 +83,7 @@ function RegisterTcc() {
     };
 
     return (
-        <div >
+        <div>
             <div className="headerRegist">
                 <h1>Registar Relatório</h1>
                 <p><strong>Adicionar novos relatórios ao sistema</strong></p>

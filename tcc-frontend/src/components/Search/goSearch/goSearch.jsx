@@ -21,6 +21,7 @@ function TccCard({ tcc, onDelete, onDetails, onEdit }) {
           <span className="autoresTexto">{listaAutores}</span>
 
           <div className="divBtnActions" style={{border:"1 px solid red"}}>
+            
             {/* Ícone de Editar */}
             <div className='iconAction1' onClick={(e) => { 
                 e.stopPropagation(); 

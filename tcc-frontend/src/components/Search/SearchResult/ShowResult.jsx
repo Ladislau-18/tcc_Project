@@ -4,7 +4,7 @@ import CircleLoad from '../../common/CircleLoad';
 import './showResult.css';
 
 
-function ShowResult({tcc, items, loading, query, onDeleteClick, onDetailsClick }) {
+function ShowResult({tcc, items, loading, query, onDeleteClick, onDetailsClick, onEdit }) {
 
     const safeItems = Array.isArray(items) ? items : [];
     // Se estiver a carregar, mostra apenas a mensagem de espera
@@ -42,9 +42,9 @@ function ShowResult({tcc, items, loading, query, onDeleteClick, onDetailsClick }
     <TccCard 
         key={tcc.idTcc || index} 
         tcc={tcc} 
+        onEdit={onEdit}
         onDelete={onDeleteClick} 
-        onDetails={onDetailsClick} // <--- Adicione esta linha!
-        onEdit={(t) => console.log("Editar", t)}
+        onDetails={onDetailsClick}
     />
 ))}
             </div>
