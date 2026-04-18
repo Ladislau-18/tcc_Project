@@ -18,7 +18,7 @@ function Home() {
 
     if (userStorage) {
       setUser(JSON.parse(userStorage));
-      fetchDados(); 
+      fetchDados();
     } else {
       toast.error("Faça o Login Para acessar a esta página");
       window.location.href = '/';
@@ -35,23 +35,23 @@ function Home() {
       //Função para pegar os dados de gráficos do banco ...
       const resGraphs = await axios.get('http://localhost/TCC_PROJETO/tcc_back/dashboard/grafics.php');
       setGraphData(resGraphs.data);
-    } 
+    }
     catch (error) {
       toast.error("Erro ao buscar estatísticas dos cards", error);
     }
   };
 
 
-  
+
 
 
   return (
     <>
-    <div className="logsHeader">
-    <h1>Visão Geral</h1>
-    <p><strong>Dashboard do sistema e dados estatísticos.</strong></p>
-    </div> 
-        <DashInfo  dados={dados} graphData={graphData}/>
+      <div className="logsHeader">
+        <h1>Visão Geral</h1>
+        <p><strong>Dashboard do sistema e dados estatísticos.</strong></p>
+      </div>
+      <DashInfo dados={dados} graphData={graphData} />
     </>
   );
 }

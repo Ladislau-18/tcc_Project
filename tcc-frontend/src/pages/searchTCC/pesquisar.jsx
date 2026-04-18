@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import DeleteModal from "../../components/common/divConfirmDelete";
 import ModalDetailsTcc from "../../components/Modal/ModalDetalhesTcc"; 
 
+import "./pesquisa.css"
+
 function SearchPage() {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
@@ -22,7 +24,7 @@ function SearchPage() {
         setShowDetailsModal(true);
     };
 
-    // Abrir a confirmação de exclusão (pode ser chamado do card ou de dentro do modal de detalhes)
+    // Abrir a confirmação de exclusão
     const confirmarExclusao = (tcc) => {
         setTccSelecionado(tcc);
         setShowDeleteModal(true);
@@ -30,18 +32,33 @@ function SearchPage() {
 
     const handleConfirmDelete = async () => {
         try {
-            await axios.delete(`http://localhost/TCC_PROJETO/tcc_back/DeleteTcc/delTcc.php?id=${tccSelecionado.idTcc}`);
-
-            setResults(prev => prev.filter(item => item.idTcc !== tccSelecionado.idTcc));
-
-            // Fecha ambos para garantir que a tela limpe
-            setShowDeleteModal(false);
-            setShowDetailsModal(false);
-            
-            toast.success("Relatório removido com sucesso!");
-        } catch (error) {
-            toast.error("Erro ao apagar o relatório");
+        // 1. Pegar o utilizador do sessionStorage (exatamente como fazes na Home)
+        const userStorage = sessionStorage.getItem('user');
+        console.log("usuário: ", userStorage)
+        
+        if (!userStorage) {
+            toast.error("Sessão expirada. Faça login novamente.");
+            return;
         }
+
+        const userObj = JSON.parse(userStorage);
+        const userId = userObj.id; // Verifica se o campo no banco/session é idUtilizador
+
+        // 2. Enviar o id do TCC e o userId para o novo delTcc.php
+        await axios.delete(`http://localhost/TCC_PROJETO/tcc_back/DeleteTcc/delTcc.php?id=${tccSelecionado.idTcc}&userId=${userId}`);
+
+        // Atualizar o estado da lista
+        setResults(prev => prev.filter(item => item.idTcc !== tccSelecionado.idTcc));
+
+        setShowDeleteModal(false);
+        setShowDetailsModal(false);
+        
+        toast.success("Relatório removido com sucesso!");
+    } catch (error) {
+        // Se o PHP retornar erro, o axios cai aqui. Podes exibir a mensagem vinda do banco:
+        const msgErro = error.response?.data?.message || "Erro ao apagar o relatório";
+        toast.error(msgErro);
+    }
     };
 
     useEffect(() => {
@@ -76,10 +93,10 @@ function SearchPage() {
     }, [query]);
 
     return (
-        <>
-            <h1>Pesquisar Relatórios</h1>
-            <p><strong>Explore e consulte todos os relatórios do sistema</strong></p>
-            
+        <>  <div className="headerSearch">
+                <h1>Pesquisar Relatórios</h1>
+                <p><strong>Explore e consulte todos os relatórios do sistema</strong></p>
+            </div>
             <SearchBar
                 query={query}
                 setQuery={setQuery}

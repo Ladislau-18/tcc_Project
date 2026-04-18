@@ -45,6 +45,7 @@ const HistoricMov = () => {
                 <th>Data e Hora</th>
                 <th>Utilizador</th>
                 <th>Ação Realizada</th>
+                <th>Título do Relatório</th> {/* Nova Coluna */}
               </tr>
             </thead>
             <tbody>
@@ -58,6 +59,9 @@ const HistoricMov = () => {
                     <span className={log.tipoAcao.includes('Eliminação') ? 'acaoBadge delete' : 'acaoBadge success'}>
                       {log.tipoAcao}
                     </span>
+                  </td>
+                  <td className="tituloColuna">
+                    <span className="tituloTexto">{log.tituloTcc || "---"}</span>
                   </td>
                 </tr>
               ))}

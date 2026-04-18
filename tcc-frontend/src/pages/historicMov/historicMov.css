@@ -1,18 +1,18 @@
 /* Container Principal */
 .logsContainer {
-  padding: 2rem;
   background-color: #f9f9f9;
   min-height: 100vh;
 }
 
 .logsHeader {
   margin-bottom: 2rem;
-  border-left: 5px solid #D35400; /* O seu laranja principal */
+  border-left: 5px solid #D35400;
+  /* O seu laranja principal */
   padding-left: 1rem;
 }
 
 .logsHeader h2 {
-  color: #2c3e50;
+  color: var(--fundo-escuro);
   margin: 0;
 }
 
@@ -20,7 +20,7 @@
 .tableWrapper {
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -31,24 +31,51 @@
 }
 
 .logsTable thead {
-  background-color: #2c3e50; /* Fundo escuro para contraste */
-  color: #fff;
+  background-color: var(--fundo-escuro);
+  color: var(--texto-claro);
+
 }
 
-.logsTable th, .logsTable td {
+.logsTable th,
+.logsTable td {
   padding: 1rem;
   border-bottom: 1px solid #eee;
 }
 
-/* Estilo das Linhas */
+
 .logRow:hover {
-  background-color: #fff5ed; /* Tom suave de laranja ao passar o mouse */
+  background-color: #dadada;
 }
 
 .dataColuna {
   font-weight: 500;
-  color: #7f8c8d;
+  color: gray;
   width: 20%;
+}
+
+
+.userColuna {
+  width: 25%;
+}
+
+.acaoColuna {
+  width: 20%;
+}
+
+.tituloTexto {
+  font-size: 1rem;
+  color: var(--texto-escuro);
+  font-style: italic;
+  font-weight: bold;
+  display: block;
+  max-width: 600px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tituloColuna {
+  width: 40%;
 }
 
 .userBadge {
@@ -56,7 +83,7 @@
   padding: 4px 10px;
   border-radius: 15px;
   font-size: 0.9rem;
-  color: #2c3e50;
+  color: var(--texto-escuro);
   font-weight: bold;
 }
 

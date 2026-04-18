@@ -10,6 +10,9 @@ $user = "root";
 $pass = "";
 $bd = "acervo_tcc";
 
+
+date_default_timezone_set('Africa/Luanda');
+
 try {
     $connection = new mysqli ($host, $user, $pass, $bd);
     $connection->set_charset("utf8mb4");

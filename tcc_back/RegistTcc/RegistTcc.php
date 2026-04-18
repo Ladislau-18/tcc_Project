@@ -100,12 +100,12 @@ try {
     }
 
     // 6. Inserir no Histórico
-$tituloCadastrado = $dadosInput['titulo']; // Título que veio do formulário
-$tipoAcaoCadastro = "Cadastro de Relatório: " . $tituloCadastrado;
+$tituloCadastrado = $dadosInput['titulo']; 
+$tipoAcaoCadastro = "Cadastro de Relatório";
 
-$stmtHist = $connection->prepare("INSERT INTO historicomovimentacao (idTcc, idUtilizador, dataAcao, tipoAcao) VALUES (?, ?, ?, ?)");
+$stmtHist = $connection->prepare("INSERT INTO historicomovimentacao (idTcc, idUtilizador, dataAcao, tipoAcao, tituloTcc) VALUES (?, ?, ?, ?, ?)");
 $idUtilizadorLogado = 1; 
-$stmtHist->bind_param("iiss", $idTccNovo, $idUtilizadorLogado, $dataMySQL, $tipoAcaoCadastro);
+$stmtHist->bind_param("iisss", $idTccNovo, $idUtilizadorLogado, $dataMySQL, $tipoAcaoCadastro, $tituloCadastrado);
 $stmtHist->execute();
 
     $connection->commit();

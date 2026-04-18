@@ -8,7 +8,7 @@ import { CancelAuthor } from "../../assets/icons";
 function RegisterTcc() {
     // 1. Estado para dados fixos e ARRAY para autores
     const [formData, setFormData] = useState({
-        titulo: '', orientadorNome: '', areaFormacao: '', 
+        titulo: '', orientadorNome: '', areaFormacao: '',
         curso: '', anoDefesa: '', nota: '',
         andar: '', sala: '', armario: '', prateleira: ''
     });
@@ -25,7 +25,7 @@ function RegisterTcc() {
     };
 
     const adicionarAutor = () => setAutores([...autores, '']);
-    
+
     const removerAutor = (index) => {
         const novosAutores = autores.filter((_, i) => i !== index);
         setAutores(novosAutores);
@@ -43,10 +43,10 @@ function RegisterTcc() {
 
     const handleFinalRegister = async () => {
         // Unindo tudo para enviar ao PHP
-        const dadosParaEnviar = { 
-            ...formData, 
+        const dadosParaEnviar = {
+            ...formData,
             autores: autores, // Enviando o array de nomes
-            dataRegistro: dataHoraAtual 
+            dataRegistro: dataHoraAtual
         };
 
         try {
@@ -70,12 +70,13 @@ function RegisterTcc() {
     };
 
     return (
-        <div className="register-page-container">
-            <h1>Registar Relatório</h1>
-            <p><strong>Adicionar novos relatórios ao sistema</strong></p><br />
-            
+        <div >
+            <div className="headerRegist">
+                <h1>Registar Relatório</h1>
+                <p><strong>Adicionar novos relatórios ao sistema</strong></p>
+            </div>
             <form onSubmit={handlePreview} className="gridMain">
-                
+
                 <div className="containerRegister">
                     <div className="section-title">
                         <FileIcon />
@@ -89,30 +90,30 @@ function RegisterTcc() {
 
                         <div className="gridInput">
                             {/* SEÇÃO DINÂMICA DE AUTORES */}
-                        <div className="autores-section">
-                            {autores.map((nome, index) => (
-                                <div key={index} className="inputContainer autor-item" style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px'}}>
-                                    <div className="inputContainer" >
-                                        <input 
-                                            type="text" 
-                                            placeholder=" " 
-                                            required 
-                                            value={nome}
-                                            onChange={(e) => handleAutorChange(index, e.target.value)} 
-                                        />
-                                        <label>Autor {index + 1}</label>
+                            <div className="autores-section">
+                                {autores.map((nome, index) => (
+                                    <div key={index} className="inputContainer autor-item" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                                        <div className="inputContainer" >
+                                            <input
+                                                type="text"
+                                                placeholder=" "
+                                                required
+                                                value={nome}
+                                                onChange={(e) => handleAutorChange(index, e.target.value)}
+                                            />
+                                            <label>Autor {index + 1}</label>
+                                        </div>
+                                        {autores.length > 1 && (
+                                            <button type="button" onClick={() => removerAutor(index)} className="btn-remove-autor">
+                                                <CancelAuthor />
+                                            </button>
+                                        )}
                                     </div>
-                                    {autores.length > 1 && (
-                                        <button type="button" onClick={() => removerAutor(index)} className="btn-remove-autor">
-                                            <CancelAuthor />
-                                        </button>
-                                    )}
-                                </div>
-                            ))}
-                            <button type="button" onClick={adicionarAutor} className="btn-add-autor">
-                                {/*<Plus size={16} />*/} Adicionar mais um autor
-                            </button>
-                        </div>
+                                ))}
+                                <button type="button" onClick={adicionarAutor} className="btn-add-autor">
+                                    {/*<Plus size={16} />*/} Adicionar mais um autor
+                                </button>
+                            </div>
                             <div className="inputContainer">
                                 <input type="text" name="orientadorNome" placeholder=" " required onChange={handleChange} />
                                 <label>Orientador</label>
@@ -168,7 +169,7 @@ function RegisterTcc() {
                                     <option value="17">17</option>
                                     <option value="18">18</option>
                                     <option value="19">19</option>
-                                    <option value="20">20</option>                      
+                                    <option value="20">20</option>
                                 </select>
                                 <label>Nota Final</label>
                             </div>
@@ -234,9 +235,9 @@ function RegisterTcc() {
                     <div className="modal-">
                         <header className="modalHeader">
                             <h2>Confirmar Registo</h2>
-                            
+
                         </header>
-                        
+
                         <div className="preview-body">
                             <p><strong>Título:</strong> {formData.titulo}</p>
                             <p><strong>Autor:</strong> {autores.join(" | ")}</p>
@@ -248,11 +249,11 @@ function RegisterTcc() {
                             <p className="current-date"><strong>
                                 Data do registo:</strong> {dataHoraAtual}</p>
                             <hr />
-                            <p><strong>Andar: </strong>{formData.andar}</p> 
-                            <p><strong>Sala: </strong> {formData.sala}</p> 
-                            <p><strong>Armário: </strong>{formData.armario}</p> 
+                            <p><strong>Andar: </strong>{formData.andar}</p>
+                            <p><strong>Sala: </strong> {formData.sala}</p>
+                            <p><strong>Armário: </strong>{formData.armario}</p>
                             <p><strong>Prateleira: </strong>{formData.prateleira}</p>
-                            
+
                         </div>
 
                         <div className="modal-actions">

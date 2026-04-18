@@ -8,7 +8,8 @@ include_once("../config.php");
 $sql = "SELECT 
             h.idMov, 
             h.dataAcao, 
-            h.tipoAcao, 
+            h.tipoAcao,
+            h.tituloTcc, 
             u.nome AS utilizadorNome
         FROM historicomovimentacao h
         LEFT JOIN utilizadores u ON h.idUtilizador = u.idUtilizador
