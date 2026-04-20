@@ -7,7 +7,7 @@ function ModalDetailsTcc({ show, tcc, onClose, onEdit, onDelete }) {
     console.log(tcc)
 
     return (
-        <div className="modalOverlay">
+        <div className="modalOverlaySeeMore">
             <div className="detailsModalContent">
                 <div className="detailsHeader">
                     <h3>Informações do Relatório</h3>

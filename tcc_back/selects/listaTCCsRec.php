@@ -14,6 +14,7 @@ if ($connection->connect_error) {
 // O LEFT JOIN não esconde o TCC se o curso não for encontrado
 $sql = "SELECT 
             t.idTcc, 
+            t.idLocal,
             t.titulo, 
             t.anoDefesa, 
             c.nome as curso, 

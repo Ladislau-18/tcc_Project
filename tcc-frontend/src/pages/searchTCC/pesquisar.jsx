@@ -107,8 +107,10 @@ function SearchPage() {
 
                 const [response] = await Promise.all([
                     axios.get(url),
-                    esperar(1000)
+                    esperar(1000),
+                    
                 ]);
+                
                 setResults(response.data);
             } catch (error) {
                 console.error("Erro na busca:", error);

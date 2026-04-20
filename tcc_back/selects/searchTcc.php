@@ -11,6 +11,7 @@ $busca = "%".$word."%";
 // 2. SQL com referências explícitas para evitar ambiguidade
 $sql = "SELECT 
     t.idTcc,
+    l.idLocal, 
     t.titulo, 
     c.nome AS curso, 
     t.orientadorNome,
@@ -22,7 +23,7 @@ $sql = "SELECT
     l.estante, 
     l.prateleira,
     l.compartimento,
-    GROUP_CONCAT(DISTINCT al.nome SEPARATOR ', ') AS autores 
+    GROUP_CONCAT(DISTINCT al.nome SEPARATOR ', ') AS autores
     FROM tccs t
     LEFT JOIN cursos c ON t.idCurso = c.idCurso
     LEFT JOIN locaisarmazenamento l ON t.idLocal = l.idLocal
@@ -31,12 +32,7 @@ $sql = "SELECT
     WHERE t.titulo LIKE '$busca'
     OR c.nome LIKE '$busca'
     OR al.nome LIKE '$busca'
-    GROUP BY t.idTcc, t.titulo, c.nome, t.orientadorNome, c.areaFormacao, t.anoDefesa, t.statusAprovacao, t.notaFinal, l.blocoArquivo, l.estante, l.prateleira, l.compartimento;";
-
-$result = mysqli_query($connection, $sql);
-
-$tccs = [];
-
+    GROUP BY t.idTcc, l.idLocal, t.titulo, c.nome, t.orientadorNome, c.areaFormacao, t.anoDefesa, t.statusAprovacao, t.notaFinal, l.blocoArquivo, l.estante, l.prateleira, l.compartimento;";
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $tccs[] = $row;

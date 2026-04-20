@@ -2,31 +2,31 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { FileIcon, LocationIcon, CancelAuthor } from "../../../assets/icons";
- // Certifique-se de que este arquivo existe e importa o estilo do register
+// Certifique-se de que este arquivo existe e importa o estilo do register
 
 function ModalEditTcc({ show, tcc, onClose, onSave }) {
     const [formData, setFormData] = useState({
-        titulo: '', orientadorNome: '', areaFormacao: '', 
-        curso: '', anoDefesa: '', nota: '', 
+        titulo: '', orientadorNome: '', areaFormacao: '',
+        curso: '', anoDefesa: '', nota: '',
         andar: '', sala: '', armario: '', prateleira: ''
     });
     const [autores, setAutores] = useState(['']);
 
     useEffect(() => {
         if (show && tcc) {
-            setFormData({
-                titulo: tcc.titulo || '',
-                orientadorNome: tcc.orientadorNome || '',
-                areaFormacao: tcc.areaFormacao || 'Informática',
-                curso: tcc.curso || '',
-                anoDefesa: tcc.anoDefesa || '',
-                nota: tcc.notaFinal || '',
-                andar: tcc.blocoArquivo || '',
-                sala: tcc.estante || '',
-                armario: tcc.compartimento || '',
-                prateleira: tcc.prateleira || ''
-            });
-            if (tcc.autores) setAutores(tcc.autores.split(' | '));
+        setFormData({
+            titulo: tcc.titulo || '',
+            orientadorNome: tcc.orientadorNome || '',
+            areaFormacao: tcc.areaFormacao || 'Informática',
+            curso: tcc.curso || '',
+            anoDefesa: tcc.anoDefesa || '',
+            nota: tcc.notaFinal || '',
+            andar: tcc.blocoArquivo || '', 
+            sala: tcc.estante || '',
+            armario: tcc.compartimento || '',
+            prateleira: tcc.prateleira || ''
+        });
+            if (tcc.autores) setAutores(tcc.autores.split(', '));
         }
     }, [show, tcc]);
 
@@ -44,7 +44,16 @@ function ModalEditTcc({ show, tcc, onClose, onSave }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const user = JSON.parse(sessionStorage.getItem('user'));
-        const payload = { ...formData, idTcc: tcc.idTcc, idLocal: tcc.idLocal, userId: user.id, autores };
+        
+        const payload = {
+             ...formData, 
+             idTcc: tcc.idTcc, 
+             idLocal: tcc.idLocal, 
+             userId: user.id, 
+             autores 
+        };
+
+        console.log("Dados enviados para o PHP:", payload)
 
         try {
             const res = await axios.post("http://localhost/TCC_PROJETO/tcc_back/UpdateTcc/updateTcc.php", payload);
@@ -62,17 +71,17 @@ function ModalEditTcc({ show, tcc, onClose, onSave }) {
     if (!show) return null;
 
     return (
-        <div className="modalOverlay"> 
+        <div className="modalOverlay">
             <div className="modalContent">
-                <form onSubmit={handleSubmit} className="gridMain">
-                    
+                <form onSubmit={handleSubmit} >
+
                     {/* SEÇÃO 1: DADOS DO TRABALHO */}
                     <div className="containerRegister">
                         <div className="section-title">
                             <FileIcon />
                             <h3>Dados do trabalho</h3>
                         </div>
-                        
+
                         <div className="divInputs">
                             <div className="inputContainer">
                                 <input type="text" name="titulo" placeholder=" " required value={formData.titulo} onChange={handleChange} />
@@ -129,7 +138,7 @@ function ModalEditTcc({ show, tcc, onClose, onSave }) {
 
                                 <div className="inputContainer">
                                     <select name="nota" required value={formData.nota} onChange={handleChange}>
-                                        {Array.from({length: 20}, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
+                                        {Array.from({ length: 20 }, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
                                     </select>
                                     <label>Nota Final</label>
                                 </div>
@@ -177,7 +186,7 @@ function ModalEditTcc({ show, tcc, onClose, onSave }) {
                     </div>
 
                     <div className="modal-footer-buttons" style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                        <button type="button" onClick={onClose} className="btnDraft" style={{ background: '#ccc' }}>Cancelar</button>
+                        <button type="button" onClick={onClose} className="btnDraft" style={{ background: 'var(--fundo-escuro)' }}>Cancelar</button>
                         <button type="submit" className="btnDraft">Salvar Alterações</button>
                     </div>
                 </form>
