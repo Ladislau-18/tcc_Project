@@ -9,9 +9,9 @@ const Header = () =>{
         <header className="header">
             <h2>Acervo Digital</h2>
                 {user && (
-                    <div className="user-info">
-                       <UserIcon/> {user.nome} {user.tipo}
-                    </div>
+                    <div className="userInfo"><strong>
+                       <UserIcon/>  {user.nome} {user.tipo}
+                    </strong></div>
                     
                 )} 
         </header>

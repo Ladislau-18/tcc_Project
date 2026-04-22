@@ -33,6 +33,13 @@ $sql = "SELECT
     OR c.nome LIKE '$busca'
     OR al.nome LIKE '$busca'
     GROUP BY t.idTcc, l.idLocal, t.titulo, c.nome, t.orientadorNome, c.areaFormacao, t.anoDefesa, t.statusAprovacao, t.notaFinal, l.blocoArquivo, l.estante, l.prateleira, l.compartimento;";
+
+
+$result = mysqli_query($connection, $sql); 
+
+$tccs = []; // Inicializamos como array vazio para garantir que o React receba sempre []
+
+
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $tccs[] = $row;

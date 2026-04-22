@@ -17,14 +17,22 @@ $sql = "SELECT
             t.idLocal,
             t.titulo, 
             t.anoDefesa, 
+            t.orientadorNome,  -- Adicionado
+            t.notaFinal,       -- Adicionado
             c.nome as curso, 
+            c.areaFormacao,    -- Adicionado
+            l.blocoArquivo,    -- Adicionado
+            l.estante,         -- Adicionado
+            l.prateleira,      -- Adicionado
+            l.compartimento,   -- Adicionado (corresponde ao armario)
             GROUP_CONCAT(al.nome SEPARATOR ' | ') AS autores 
         FROM tccs t
         LEFT JOIN cursos c ON t.idCurso = c.idCurso
+        LEFT JOIN locaisarmazenamento l ON t.idLocal = l.idLocal 
         LEFT JOIN tcc_autores ta ON t.idTcc = ta.idTcc
         LEFT JOIN alunos al ON ta.idAluno = al.idAluno
         GROUP BY t.idTcc
-        ORDER BY t.idTcc DESC ";
+        ORDER BY t.idTcc DESC";
 
 
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { FileIcon, LocationIcon, CancelAuthor } from "../../../assets/icons";
-// Certifique-se de que este arquivo existe e importa o estilo do register
 
 function ModalEditTcc({ show, tcc, onClose, onSave }) {
     const [formData, setFormData] = useState({
@@ -14,19 +13,23 @@ function ModalEditTcc({ show, tcc, onClose, onSave }) {
 
     useEffect(() => {
         if (show && tcc) {
-        setFormData({
-            titulo: tcc.titulo || '',
-            orientadorNome: tcc.orientadorNome || '',
-            areaFormacao: tcc.areaFormacao || 'Informática',
-            curso: tcc.curso || '',
-            anoDefesa: tcc.anoDefesa || '',
-            nota: tcc.notaFinal || '',
-            andar: tcc.blocoArquivo || '', 
-            sala: tcc.estante || '',
-            armario: tcc.compartimento || '',
-            prateleira: tcc.prateleira || ''
-        });
-            if (tcc.autores) setAutores(tcc.autores.split(', '));
+            setFormData({
+                titulo: tcc.titulo || '',
+                orientadorNome: tcc.orientadorNome || '',
+                areaFormacao: tcc.areaFormacao || 'Informática',
+                curso: tcc.curso || '',
+                anoDefesa: tcc.anoDefesa || '',
+                nota: tcc.notaFinal || '',
+                // Sincronizado com os nomes vindos do novo SELECT do PHP
+                andar: tcc.blocoArquivo || '',
+                sala: tcc.estante || '',
+                armario: tcc.compartimento || '',
+                prateleira: tcc.prateleira || ''
+            });
+            // Ajuste para lidar com autores vindos como String ou Array
+            if (tcc.autores) {
+                setAutores(typeof tcc.autores === 'string' ? tcc.autores.split(' | ') : tcc.autores);
+            }
         }
     }, [show, tcc]);
 
@@ -41,30 +44,48 @@ function ModalEditTcc({ show, tcc, onClose, onSave }) {
         setAutores(novos);
     };
 
+    const addAutor = () => setAutores([...autores, '']);
+    const removeAutor = (index) => setAutores(autores.filter((_, i) => i !== index));
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user = JSON.parse(sessionStorage.getItem('user'));
-        
-        const payload = {
-             ...formData, 
-             idTcc: tcc.idTcc, 
-             idLocal: tcc.idLocal, 
-             userId: user.id, 
-             autores 
-        };
 
-        console.log("Dados enviados para o PHP:", payload)
+        // 1. Verificação de segurança da sessão
+        const userSession = sessionStorage.getItem('user');
+        if (!userSession) {
+            toast.error("Sessão expirada. Faça login novamente.");
+            return;
+        }
+
+        const userObj = JSON.parse(userSession);
+
+        // 2. CORREÇÃO CRÍTICA: Captura o ID correto conforme o seu banco
+        const userId = userObj.idUtilizador || userObj.id;
+
+        if (!userId) {
+            toast.error("Erro: Identificador do utilizador não encontrado.");
+            return;
+        }
+
+        const payload = {
+            ...formData,
+            idTcc: tcc.idTcc,
+            idLocal: tcc.idLocal,
+            userId: userId, // Agora garantido que não é null
+            autores
+        };
 
         try {
             const res = await axios.post("http://localhost/TCC_PROJETO/tcc_back/UpdateTcc/updateTcc.php", payload);
             if (res.data.status === "success") {
                 toast.success(res.data.message);
-                onSave();
+                onSave(); // Dispara a atualização da lista na SearchPage
             } else {
                 toast.error(res.data.message);
             }
         } catch (error) {
-            toast.error("Erro na conexão");
+            console.error("Erro na atualização:", error);
+            toast.error("Erro na ligação ao servidor");
         }
     };
 

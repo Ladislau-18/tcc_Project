@@ -45,10 +45,10 @@ function ModalDetailsTcc({ show, tcc, onClose, onEdit, onDelete }) {
                     <div className="dadosLocal">
                         <h5>Localização Física</h5>
                         <div className="locationGrid">
-                            <div className="locField"><span>Andar:</span> {tcc.blocoArquivo}</div>
-                            <div className="locField"><span>Sala:</span> {tcc.blocoArquivo}</div>
-                            <div className="locField"><span>Armário:</span> {tcc.armario}</div>
-                            <div className="locField"><span>Prateleira:</span> {tcc.prateleira}</div>
+                            <div className="locField"><span>Andar:</span> {tcc.blocoArquivo || "---"}</div>
+                            <div className="locField"><span>Sala:</span> {tcc.estante || "---"}</div>
+                            <div className="locField"><span>Armário:</span> {tcc.compartimento || "---"}</div>
+                            <div className="locField"><span>Prateleira:</span> {tcc.prateleira || "---"}</div>
                         </div>
                     </div>
                 </div>

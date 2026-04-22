@@ -87,7 +87,7 @@ try {
     $stmtHist->execute();
 
     $connection->commit();
-    echo json_encode(["status" => "success", "message" => "Relatório e localização atualizados com sucesso!"]);
+    echo json_encode(["status" => "success", "message" => "Relatório atualizado com sucesso!"]);
 
 } catch (Exception $e) {
     $connection->rollback();
