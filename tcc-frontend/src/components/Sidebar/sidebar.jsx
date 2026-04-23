@@ -1,34 +1,65 @@
-import React from "react";
-import { NavLink } from "react-router-dom"; // Importante mudar para NavLink
-import { HomeIcon, SearchIcon, RegistIcon, Statistics, CatalogIcon } from "../../assets/icons";
+import React, {useState} from "react";
+import { NavLink, useNavigate } from "react-router-dom"; // Importante mudar para NavLink
+import { MenuIcon, HomeIcon, SearchIcon, RegistIcon, Statistics, CatalogIcon, LogoutIcon } from "../../assets/icons";
+import toast from "react-hot-toast"
 
 import '../Sidebar/sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
+   
+
+    
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        sessionStorage.clear(); 
+        
+        navigate("/"); 
+        
+       
+        toast.success("Sessão terminada!");
+    }
+
     return (
-        <aside className="sidebar">
+        <aside className={`sidebar ${isOpen ? "open" : "collapsed"}`} id="sidebarT">
+
+            <div className="IconMenuSidebar" onClick={toggleSidebar}>
+                <MenuIcon />
+            </div>
+
             <nav>
-                {/* O atributo 'end' garante que o Dashboard só fique ativo na rota exata */}
+                
                 <NavLink to="/pages/home" className="navItem" end>
-                    <HomeIcon /> <span>Dashboard</span>
+                    <HomeIcon /> 
+                    {isOpen && <span>Dashboard</span>}
                 </NavLink>
 
                 <NavLink to="/pages/pesquisar" className="navItem">
-                    <SearchIcon /> <span>Pesquisar</span>
+                    <SearchIcon />
+                    {isOpen && <span>Pesquisar</span>}
                 </NavLink>
 
                 <NavLink to="/pages/registerTcc" className="navItem">
-                    <RegistIcon /> <span>Registar TCC</span>
+                    <RegistIcon /> 
+                    {isOpen && <span>Registar</span>}
                 </NavLink>
 
                 <NavLink to="/pages/statistics" className="navItem">
-                    <Statistics /> <span>Análise Acadêmica</span>
+                    <Statistics /> 
+                    {isOpen && <span>Análise Acadêmica</span>}
                 </NavLink>
 
                 <NavLink to="/pages/historicMov" className="navItem">
-                    <CatalogIcon /> <span>Registo de actividade</span>
+                    <CatalogIcon />
+                    {isOpen && <span>Registro de Actividade</span>}
                 </NavLink>
+
             </nav>
+            
+                <div className="btnLogout" onClick={handleLogout}>
+                    <LogoutIcon />
+                    {isOpen && <span>Sair</span>}
+                </div>
         </aside>
     );
 }

@@ -15,26 +15,30 @@
 }
 
 
-
-.layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Ocupa no MÍNIMO a tela inteira */
-  width: 100%;
-}
+/* layout.css */
 
 .body { 
   display: flex;
   flex: 1;
-  height: auto; 
   background-color: black;
+  position: relative; 
 }
-
 
 .content {
   flex: 1;
   padding: 20px;
-  background: var(--fundo-claro);
   background-color: #f5f5f5;
   overflow-y: auto;
+  transition: margin-left 0.3s ease, width 0.3s ease; 
+}
+
+
+.content.compact {
+  margin-left: 80px; 
+  width: calc(100% - 80px);
+}
+
+.content.expanded {
+  margin-left: 260px; 
+  width: calc(100% - 260px);
 }

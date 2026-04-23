@@ -1,20 +1,24 @@
+import React, { useState } from "react"; // Adicionado useState
 import Header from "../Header/header";
 import Sidebar from "../Sidebar/sidebar";
 import { Outlet } from 'react-router-dom';
-
 import "./layout.css"
 
-function Layout (){
+function Layout() {
+    // Estado da sidebar
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-        const userStorage = sessionStorage.getItem('user');
-        const user = userStorage ? JSON.parse(userStorage) : null;
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
-        return (
-            <div className="layout">
-                <Header />
-                <div className="body">
-                <Sidebar />
-                <div className="content">
+    return (
+        <div className="layout">
+            <Header isOpen={isSidebarOpen} />
+            <div className="body">
+                <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+                
+                <div className={`content ${isSidebarOpen ? "expanded" : "compact"}`}>
                     <Outlet />
                 </div>
             </div>
@@ -23,4 +27,3 @@ function Layout (){
 }
 
 export default Layout;
-

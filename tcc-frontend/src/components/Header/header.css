@@ -1,14 +1,34 @@
+/* header.css */
 
 .header {
+  top: 0;
+  right: 0;
   height: 60px;
   background: var(--cor-primaria);
   color: var(--texto-claro);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px 25px;
+  padding: 0 25px;
+  z-index: 1100;
+  transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
-.userInfo{
+/*Sidebar minimizada*/
+.header.compact {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+
+/*Sidebar maximizada */
+.header.expanded {
+  margin-left: 260px;
+  width: calc(100% - 260px);
+}
+
+.userInfo {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

@@ -30,7 +30,7 @@ function TccCard({ tcc, onDelete, onDetails, onEdit }) {
               <EditTcc />
             </div>
 
-            {/* Ícone de Apagar (Direto para o modal de confirmação) */}
+            {/* Ícone de Apagar */}
             <div className='iconAction2' onClick={(e) => {
                 e.stopPropagation();
                 onDelete(tcc);
@@ -38,7 +38,7 @@ function TccCard({ tcc, onDelete, onDetails, onEdit }) {
               <DeleteTcc />
             </div>
 
-            {/* Botão Ver Detalhes (Abre o modal de informações) */}
+            {/* Botão Ver Detalhes*/}
             <button 
               className="btnTccDet" 
               onClick={() => onDetails(tcc)}
