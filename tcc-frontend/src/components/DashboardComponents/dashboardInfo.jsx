@@ -2,7 +2,7 @@
 import "./dashboardInfo.css";
 import { BookIcon, InsertIcon, GraficIcon } from "../../assets/icons";
 import { BarGrafic, CircleGrafic } from "./grafics"; 
-
+import TableHistoricMov from "../Historic/tableHistóricMov";
 function DashInfo ({dados, graphData}){
 
     return (
@@ -34,7 +34,8 @@ function DashInfo ({dados, graphData}){
 
             </div>
             <DashGraficos graficData={graphData}/>
-            <TableActivity/>
+            <h3>Histórico de movimentações</h3>
+            <TableHistoricMov/>
         </>
     )
 }

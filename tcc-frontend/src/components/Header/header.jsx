@@ -1,6 +1,6 @@
 import React from "react";
 import { UserIcon } from "../../assets/icons";
-import '../Header/header.css';
+import './header.css';
 
 
 const Header = ({ isOpen }) => {

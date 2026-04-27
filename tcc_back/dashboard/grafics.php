@@ -22,14 +22,15 @@ $response['barData'] = $barData;
 
 
 // 2. Dados para o Gráfico de Pizza (Status)
-$sqlStatus = "SELECT statusAprovacao as name, COUNT(*) as value FROM tccs GROUP BY statusAprovacao";
-$resStatus = mysqli_query($connection, $sqlStatus);
+$sqlTipo = "SELECT tipo_projeto as name, COUNT(*) as value FROM tccs GROUP BY tipo_projeto";
+$resTipo = mysqli_query($connection, $sqlTipo);
 
 $circleData = [];
-while ($row = mysqli_fetch_assoc($resStatus)) {
+while ($row = mysqli_fetch_assoc($resTipo)) {
     $circleData[] = [
-        "name"  => $row['name'],
-        "value" => (int)$row['value'] // converter para numero
+        // O "name" será "Individual" ou "Coletivo" (ou como estiver na DB)
+        "name"  => $row['name'], 
+        "value" => (int)$row['value']
     ];
 }
 

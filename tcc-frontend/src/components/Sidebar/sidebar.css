@@ -96,3 +96,7 @@ nav {
     cursor: pointer;
     border-left: 4px solid transparent; 
 }
+
+.btnLogout:hover{
+  background-color: rgba(255, 102, 0, 0.05);
+}

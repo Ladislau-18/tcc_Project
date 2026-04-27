@@ -1,56 +1,65 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-
 include_once("../config.php");
 
-// 1. Sanitização básica para evitar erros de caracteres especiais
-$word = isset($_GET['q']) ? mysqli_real_escape_string($connection, $_GET['q']) : '';
-$busca = "%".$word."%";
+$limite = 10; 
+$pagina = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($pagina - 1) * $limite;
+$busca = isset($_GET['query']) ? "%" . $_GET['query'] . "%" : "%%";
 
-// 2. SQL com referências explícitas para evitar ambiguidade
-$sql = "SELECT 
-    t.idTcc,
-    l.idLocal, 
-    t.titulo, 
-    c.nome AS curso, 
-    t.orientadorNome,
-    c.areaFormacao, 
-    t.anoDefesa,
-    t.statusAprovacao,
-    t.notaFinal,
-    l.blocoArquivo, 
-    l.estante, 
-    l.prateleira,
-    l.compartimento,
-    GROUP_CONCAT(DISTINCT al.nome SEPARATOR ', ') AS autores
-    FROM tccs t
-    LEFT JOIN cursos c ON t.idCurso = c.idCurso
-    LEFT JOIN locaisarmazenamento l ON t.idLocal = l.idLocal
-    LEFT JOIN tcc_autores ta ON t.idTcc = ta.idTcc
-    LEFT JOIN alunos al ON ta.idAluno = al.idAluno
-    WHERE t.titulo LIKE '$busca'
-    OR c.nome LIKE '$busca'
-    OR al.nome LIKE '$busca'
-    GROUP BY t.idTcc, l.idLocal, t.titulo, c.nome, t.orientadorNome, c.areaFormacao, t.anoDefesa, t.statusAprovacao, t.notaFinal, l.blocoArquivo, l.estante, l.prateleira, l.compartimento;";
+try {
+    // 1. Contar total de resultados 
+    $sqlContar = "SELECT COUNT(DISTINCT t.idTcc) as total 
+                  FROM tccs t
+                  LEFT JOIN cursos c ON t.idCurso = c.idCurso
+                  LEFT JOIN tcc_autores ta ON t.idTcc = ta.idTcc
+                  LEFT JOIN alunos al ON ta.idAluno = al.idAluno
+                  WHERE t.titulo LIKE ? OR c.nome LIKE ? OR al.nome LIKE ?";
+    
+    $stmtTotal = $connection->prepare($sqlContar);
+    $stmtTotal->bind_param("sss", $busca, $busca, $busca);
+    $stmtTotal->execute();
+    $totalRegistos = $stmtTotal->get_result()->fetch_assoc()['total'];
+    $totalPaginas = ceil($totalRegistos / $limite);
 
+    // 2. A tua Query Complexa com LIMIT e OFFSET para a paginação
+    $sql = "SELECT 
+                t.idTcc, t.idLocal, t.titulo, t.orientadorNome, t.anoDefesa, 
+                t.statusAprovacao, t.notaFinal,
+                c.nome AS curso, c.areaFormacao, 
+                l.blocoArquivo, l.estante, l.prateleira, l.compartimento,
+                GROUP_CONCAT(DISTINCT al.nome SEPARATOR ', ') AS autores
+            FROM tccs t
+            LEFT JOIN cursos c ON t.idCurso = c.idCurso
+            LEFT JOIN locaisarmazenamento l ON t.idLocal = l.idLocal
+            LEFT JOIN tcc_autores ta ON t.idTcc = ta.idTcc
+            LEFT JOIN alunos al ON ta.idAluno = al.idAluno
+            WHERE t.titulo LIKE ? OR c.nome LIKE ? OR al.nome LIKE ?
+            GROUP BY t.idTcc
+            ORDER BY t.anoDefesa DESC
+            LIMIT ? OFFSET ?";
 
-$result = mysqli_query($connection, $sql); 
-
-$tccs = []; // Inicializamos como array vazio para garantir que o React receba sempre []
-
-
-if ($result) {
-    while ($row = mysqli_fetch_assoc($result)) {
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("sssii", $busca, $busca, $busca, $limite, $offset);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $tccs = [];
+    while ($row = $result->fetch_assoc()) {
         $tccs[] = $row;
     }
-} else {
-    // Se houver erro no SQL, retornamos um erro JSON em vez de nada
-    // Isso evita o erro de "map is not a function"
-    echo json_encode(["erro" => mysqli_error($connection)]);
-    exit;
-}
 
-// Garante que sempre enviamos um array, mesmo que vazio
-echo json_encode($tccs);
+    echo json_encode([
+        "tccs" => $tccs,
+        "totalPaginas" => $totalPaginas,
+        "totalRegistos" => $totalRegistos,
+        "paginaAtual" => $pagina
+    ]);
+
+} catch (Exception $e) {
+    echo json_encode(["erro" => $e.getMessage()]);
+}
 ?>
+
+

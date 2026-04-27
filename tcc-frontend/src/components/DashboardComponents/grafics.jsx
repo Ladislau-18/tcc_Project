@@ -31,7 +31,7 @@ function CircleGrafic({ data, title, label1, label2 }) {
     return (
         <div className="ContainerGraph">
             {/* TÍTULO DINÂMICO */}
-            <h4>{title || "Status de Aprovação"}</h4>
+            <h4>{title || "Tipo de trabalhos"}</h4>
 
             <ResponsiveContainer className="graph">
                 <PieChart>
@@ -48,12 +48,12 @@ function CircleGrafic({ data, title, label1, label2 }) {
                 <div style={{ display: 'flex' }}>
                     <div style={{width: "20px", height: "20px", borderRadius: '50%', background: 'var(--cor-primaria)'}}></div>
                     {/* LEGENDA DINÂMICA */}
-                    <span>{label1 || "Aprovado"}</span>
+                    <span>{label1 || "Trabalhos em Grupo"}</span>
                 </div>
                 <div style={{ display: 'flex' }}>
                     <div style={{width: "20px", height: "20px", borderRadius: '50%', background: 'var(--fundo-escuro)'}}></div>
                     {/* LEGENDA DINÂMICA */}
-                    <span>{label2 || "Reprovado"}</span>
+                    <span>{label2 || "Trabalhos individuais"}</span>
                 </div>
             </div>
         </div>
