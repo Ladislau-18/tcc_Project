@@ -96,6 +96,30 @@ function RegisterTcc() {
         }
     };
 
+    const gerarNotas = () => {
+        const notaMaxima = 20;
+        const notaMinima = 0;
+        const notas = [];
+
+        // Usamos i++ para as notas aparecerem de 0 a 20 (ordem crescente)
+        // Se preferir as maiores notas primeiro, use (let i = notaMaxima; i >= notaMinima; i--)
+        for (let i = notaMinima; i <= notaMaxima; i++) {
+            notas.push(i);
+        }
+        return notas;
+    };
+
+    const gerarAnos = () => {
+        const anoAtual = new Date().getFullYear();
+        const anoInicio = 2010;
+        const anos = [];
+
+        for (let i = anoAtual + 1; i >= anoInicio; i--) {
+            anos.push(i);
+        }
+        return anos;
+    };
+
     return (
         <div>
             <div className="headerRegist">
@@ -162,41 +186,24 @@ function RegisterTcc() {
                                 <label>Curso</label>
                             </div>
                             <div className="inputContainer">
-                                <select name="anoDefesa" required onChange={handleChange}>
+                                <select name="anoDefesa" required onChange={handleChange} value={formData.anoDefesa}>
                                     <option value="" hidden></option>
-                                    <option value="2020">2020</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
+                                    {gerarAnos().map((ano) => (
+                                        <option key={ano} value={ano}>
+                                            {ano}
+                                        </option>
+                                    ))}
                                 </select>
                                 <label>Ano da Defesa</label>
                             </div>
                             <div className="inputContainer">
-                                <select name="nota" required onChange={handleChange}>
+                                <select name="nota" required onChange={handleChange} >
                                     <option value="" hidden></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="19">19</option>
-                                    <option value="20">20</option>
+                                    {gerarNotas().map((notas) => (
+                                        <option key={notas} value={notas}>
+                                            {notas}
+                                        </option>
+                                    ))}
                                 </select>
                                 <label>Nota Final</label>
                             </div>
