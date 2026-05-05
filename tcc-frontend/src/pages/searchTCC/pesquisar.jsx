@@ -31,6 +31,7 @@ function SearchPage() {
     notaMax: 20
 });
 
+
     // 3. Lógica Unificada de Busca e Paginação
     useEffect(() => {
         const carregarDados = async () => {
@@ -49,7 +50,7 @@ function SearchPage() {
                 console.log("Dados recebidos do PHP:", data);
 
                 if (data.tccs) {
-                    setTccs(data.tccs); // Atualiza os cards com os 5 resultados da página
+                    setTccs(data.tccs); 
                     setTotalPaginas(data.totalPaginas);
                 } else {
                     setTccs([]);
@@ -63,10 +64,10 @@ function SearchPage() {
             }
         };
 
-        // Debounce: aguarda 500ms após o utilizador parar de digitar para fazer a busca
+        // delay de meio segundo na pesquisa automática
         const delayDebounceFn = setTimeout(() => {
             carregarDados();
-        }, 500);
+        }, 1000);
 
         return () => clearTimeout(delayDebounceFn);
     }, [pagina, termoBusca, filtros]);

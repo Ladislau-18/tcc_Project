@@ -6,21 +6,27 @@ import toast from "react-hot-toast";
 import { CancelAuthor } from "../../assets/icons";
 
 function RegisterTcc() {
-    // 1. Estado para dados fixos e ARRAY para autores
+    // Estado para dados do documento
     const [formData, setFormData] = useState({
         titulo: '', orientadorNome: '', areaFormacao: '',
         curso: '', anoDefesa: '', nota: '',
         andar: '', sala: '', armario: '', prateleira: ''
     });
 
-    const [autores, setAutores] = useState(['']); // Começa com um autor vazio
+    const [autores, setAutores] = useState(['']);
     const [showModal, setShowModal] = useState(false);
     const dataHoraAtual = new Date().toLocaleString('pt-PT');
 
-    // Funções para gerir autores dinâmicos
+    //função para permitir apenas letras
+    const validateLetters = (value) => {
+        // Regex para apenas letras
+        return value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+    };
+
+    // funções para autores dinâmicos
     const handleAutorChange = (index, value) => {
         const novosAutores = [...autores];
-        novosAutores[index] = value;
+        novosAutores[index] = validateLetters(value);
         setAutores(novosAutores);
     };
 
@@ -33,7 +39,15 @@ function RegisterTcc() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        let finalValue = value;
+
+        // Se for um destes campos, remove números e símbolos
+        if (name === "titulo" || name === "orientadorNome") {
+            finalValue = validateLetters(value);
+        }
+
+        setFormData(prev => ({ ...prev, [name]: finalValue }));
     };
 
     const handlePreview = (e) => {
@@ -42,23 +56,23 @@ function RegisterTcc() {
     };
 
     const handleFinalRegister = async () => {
-        // 1. Pegar o utilizador do sessionStorage (como fizemos na Pesquisa/Home)
+        // guardar utilisador logado e validação
         const userStorage = sessionStorage.getItem('user');
-        
+
         if (!userStorage) {
             toast.error("Sessão expirada. Por favor, faça login novamente.");
             return;
         }
 
         const userObj = JSON.parse(userStorage);
-        const userId = userObj.id; // Usando 'id' que é como está no teu storage
+        const userId = userObj.id;
 
-        // 2. Unindo tudo para enviar ao PHP (incluindo o userId)
+        // enviar dados de registo
         const enviarDados = {
             ...formData,
             autores: autores,
             dataRegistro: dataHoraAtual,
-            userId: userId // <-- Adicionamos esta linha aqui
+            userId: userId
         };
 
         try {
@@ -73,7 +87,7 @@ function RegisterTcc() {
             if (resultado.sucesso) {
                 toast.success(resultado.mensagem);
                 setShowModal(false);
-                // Opcional: Limpar o formulário após sucesso
+
             } else {
                 toast.error(resultado.mensagem);
             }
@@ -97,7 +111,7 @@ function RegisterTcc() {
                     </div>
                     <div className="divInputs">
                         <div className="inputContainer">
-                            <input type="text" name="titulo" placeholder=" " required onChange={handleChange} />
+                            <input type="text" name="titulo" value={formData.titulo} placeholder=" " required onChange={handleChange} />
                             <label>Título</label>
                         </div><br />
 
@@ -124,14 +138,14 @@ function RegisterTcc() {
                                     </div>
                                 ))}
                                 <button type="button" onClick={adicionarAutor} className="btn-add-autor">
-                                    {/*<Plus size={16} />*/} Adicionar mais um autor
+                                    Adicionar autor
                                 </button>
                             </div>
                             <div className="inputContainer">
-                                <input type="text" name="orientadorNome" placeholder=" " required onChange={handleChange} />
+                                <input type="text" name="orientadorNome" value={formData.orientadorNome} placeholder=" " required onChange={handleChange} />
                                 <label>Orientador</label>
                             </div>
-                            {/* Selects com as opções que já definiu */}
+                            {/* Selects*/}
                             <div className="inputContainer">
                                 <select name="areaFormacao" required onChange={handleChange}>
                                     <option value="" hidden></option>
@@ -242,7 +256,7 @@ function RegisterTcc() {
                 <button type="submit" className="btnDraft">Visualizar</button>
             </form>
 
-            {/* MODAL DE PRÉ-VISUALIZAÇÃO (OVERLAY) */}
+            {/* MODAL DE PRÉ-VISUALIZAÇÃO */}
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal-">

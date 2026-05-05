@@ -1,12 +1,12 @@
-
 :root {
-  --cor-primaria: #d96f32;
-  --cor-fundo: #f4f4f4;
-  --texto-escuro: #202020;
+    --cor-primaria: #d96f32;
+    --cor-fundo: #f4f4f4;
+    --texto-escuro: #202020;
 }
 
 .login-screen {
-    background-color: var(--cor-fundo); /* Cor de fundo suave */
+    background-color: var(--cor-fundo);
+    /* Cor de fundo suave */
     height: 100vh;
     display: flex;
     align-items: center;
@@ -14,29 +14,31 @@
 }
 
 .form {
-    background-color: white; 
+    background-color: white;
     padding: 40px;
-    border-radius: 5px; 
-    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1); 
+    border-radius: 5px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
     width: 450px;
-    
+
 }
 
-.divTitle{
+.divTitle {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.labelTitle{
+
+.labelTitle {
     color: var(--texto-escuro);
     font-weight: bold;
     text-align: center;
 }
-.labelSubtitle{
+
+.labelSubtitle {
     color: gray;
 }
 
-.inputForm{
+.inputForm {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
@@ -45,21 +47,39 @@
     border: none;
     background-color: #f0f0f0;
 }
-.inputForm:focus{
+
+.SMSverifyPassword {
+    color: var(--cor-primaria);
+    font-size: 12px;
+    margin-top: -5px;
+    text-align: left;
+    width: 100%;
+}
+
+.SMSPassword {
+    color: gray;
+    font-size: 13px;
+    margin-top: -5px;
+    text-align: left;
+    width: 100%;
+}
+
+.inputForm:focus {
     border: 1px solid var(--cor-primaria);
 }
 
-.labelForgotPass{
+.labelForgotPass {
     font-size: 13px;
     text-decoration: none;
     color: var(--texto-escuro);
     font-style: italic;
 }
-.labelForgotPass:hover{
+
+.labelForgotPass:hover {
     color: var(--cor-primaria);
 }
 
-.imputForm:focus{
+.imputForm:focus {
     border: 2px solid var(--cor-primaria);
 }
 
@@ -73,10 +93,10 @@
     margin-top: 30px;
     cursor: pointer;
     width: 100%;
-    border-radius: 5px;     
+    border-radius: 5px;
 }
 
-.linkRegister{
-    font-size: 13px; 
+.linkRegister {
+    font-size: 13px;
     margin-top: 30px;
 }

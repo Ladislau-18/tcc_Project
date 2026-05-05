@@ -15,27 +15,36 @@ include_once '../config.php';
 $dados = json_decode(file_get_contents("php://input"));
 
 if (!empty($dados->nome) && !empty($dados->numProcesso) && !empty($dados->email) && !empty($dados->senha)) {
-    $senhaHash = password_hash($dados->senha, PASSWORD_DEFAULT);
-    
-    $query = "INSERT INTO utilizadores (nome, numProcesso, email, senha) VALUES (?, ?, ?, ?)";
-    
-    $stmt = $connection->prepare($query);
-    
-    if ($stmt) {
-     
-        $stmt->bind_param("ssss", $dados->nome, $dados->numProcesso, $dados->email, $senhaHash);
+    try {
+        $senhaHash = password_hash($dados->senha, PASSWORD_DEFAULT);
         
-        if ($stmt->execute()) {
-            echo json_encode(["message" => "Usuário cadastrado com sucesso!"]);
-        } else {
-            echo json_encode(["error" => "Erro ao cadastrar: E-mail ou Número de processo já existem."]);
+        $query = "INSERT INTO utilizadores (nome, numProcesso, email, senha) VALUES (?, ?, ?, ?)";
+        $stmt = $connection->prepare($query);
+        
+        if ($stmt) {
+            $stmt->bind_param("ssss", $dados->nome, $dados->numProcesso, $dados->email, $senhaHash);
+            
+            if ($stmt->execute()) {
+                echo json_encode(["message" => "Usuário cadastrado com sucesso!"]);
+            }
+            $stmt->close();
         }
-        $stmt->close();
-    } else {
-        echo json_encode(["Erro na preparação do banco de dados."]);
+    } catch (mysqli_sql_exception $e) {
+        // O código 1062 é o erro de 'Duplicate Entry' do MySQL
+        if ($e->getCode() === 1062) {
+            // Verifica qual campo duplicou
+            if (str_contains($e->getMessage(), 'numProcesso')) {
+                echo json_encode(["error" => "Número de Processo já está registado!"]);
+            } else if (str_contains($e->getMessage(), 'email')) {
+                echo json_encode(["error" => "E-mail já está registado!"]);
+            } else {
+                echo json_encode(["error" => "Dados duplicados detectados."]);
+            }
+        } else {
+            echo json_encode(["error" => "Erro ao processar o cadastro."]);
+        }
     }
-} 
-else {
-    echo json_encode("Preencha todos os campos obrigatórios.");
+} else {
+    echo json_encode(["error" => "Preencha todos os campos obrigatórios."]);
 }
 ?>

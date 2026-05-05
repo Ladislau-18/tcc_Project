@@ -4,84 +4,135 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import './login.css';
 
-function Login(){
-    const [numProcesso, setNumProcesso] = useState('');
-    const [senha, setSenha] = useState('');
-    
-    const navigate = useNavigate();
+function Login() {
+  const [numProcesso, setNumProcesso] = useState('');
+  const [senha, setSenha] = useState('');
+  const [erroSenha, setErroSenha] = useState('');
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
 
-        const loadingToast = toast.loading("Entrando...");
+  const navigate = useNavigate();
 
-        try {
-          const response = await axios.post(
-            'http://localhost/TCC_PROJETO/tcc_back/logPHP/login.php',
-            { numProcesso, senha }
-          );
 
-          toast.dismiss(loadingToast);
+  const handleSenhaChange = (e) => {
+    const valor = e.target.value;
+    setSenha(valor);
 
-          if (response.data.success) {
+    // minimo 8 caractere
+    if (valor.length > 0 && valor.length < 8) {
+      setErroSenha('A senha é muito curta (mínimo 8 caracteres).');
+    }
+    // apenas letras e numeros
+    else if (valor.length >= 8) {
+      const temLetras = /[a-zA-Z]/.test(valor);
+      const temNumeros = /[0-9]/.test(valor);
 
-            toast.success("Login efectuado com sucesso");
+      if (!temLetras || !temNumeros) {
+        setErroSenha('A senha deve conter letras e números.');
+      } else {
+        setErroSenha(''); // Senha aprovada
+      }
+    }
+    else {
+      setErroSenha('');
+    }
+  };
 
-            sessionStorage.setItem('user', JSON.stringify(response.data));
+  const handleNumProcessoChange = (e) => {
+    const valor = e.target.value;
 
-            setTimeout(() => {
-              navigate('/pages/home');
-            }, 1500);
+    // Regex para digitar apenas numeros
+    const apenasNumeros = valor.replace(/\D/g, "");
 
-          } else {
-            toast.error(response.data.error || "Erro desconhecido");
-          }
+    if (apenasNumeros.length <= 5) {
+      setNumProcesso(apenasNumeros);
+    }
+  };
 
-        } catch (error) {
-          toast.dismiss(loadingToast);
-          console.error(error);
-          toast.error("Erro ao conectar ao servidor.");
-        }
-    };
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-    return (
-        <div className="login-screen">
-            <div className="form">
-                <div className='divTitle'>
-                    <h3 className="labelTitle">Bem-Vindo ao Acervo Digital</h3>
-                    <p className="labelSubtitle">Preencha com os seus dados</p>
-                </div>
-                
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="number"
-                        placeholder="Nº de Processo"
-                        className="inputForm"
-                        onChange={(e) => setNumProcesso(e.target.value)}
-                        required
-                    />
 
-                    <input
-                        type="password"
-                        placeholder="Senha"
-                        className="inputForm"
-                        onChange={(e) => setSenha(e.target.value)}
-                        required
-                    />
-                    
-                    <button className="buttonForm">Entrar</button>
-                </form>
+    const loadingToast = toast.loading("Entrando...");
 
-                <Link to="" className="labelForgotPass">
-                  Esqueceu a sua senha?
-                </Link>
+    try {
+      const response = await axios.post(
+        'http://localhost/TCC_PROJETO/tcc_back/logPHP/login.php',
+        { numProcesso, senha }
+      );
 
-                <p className="linkRegister">
-                  Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
-                </p>
-            </div>
+      toast.dismiss(loadingToast);
+
+      if (response.data.success) {
+        toast.success("Login efectuado com sucesso");
+        sessionStorage.setItem('user', JSON.stringify(response.data));
+
+        setTimeout(() => {
+          navigate('/pages/home');
+        }, 1500);
+
+      } else {
+        toast.error(response.data.error || "Erro desconhecido");
+      }
+
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      console.error(error);
+      toast.error("Erro ao conectar ao servidor.");
+    }
+  };
+
+  return (
+    <div className="login-screen">
+      <div className="form">
+        <div className='divTitle'>
+          <h3 className="labelTitle">Bem-Vindo ao Acervo Digital</h3>
+          <p className="labelSubtitle">Preencha com os seus dados</p>
         </div>
-    );
+
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Nº de Processo"
+            className="inputForm"
+            value={numProcesso}
+            onChange={handleNumProcessoChange}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            className="inputForm"
+            value={senha}
+            onChange={handleSenhaChange}
+            required
+            
+          />
+
+          {erroSenha && (
+            <span className='SMSverifyPassword'>
+              {erroSenha}
+            </span>
+          )}
+          < br/>
+
+          <span className='SMSPassword'>
+              A senha deve ter pelo menos 8 caracteres, incluindo um número e uma letra.
+            </span>
+
+          <button className="buttonForm">Entrar</button>
+        </form>
+
+        <Link to="" className="labelForgotPass">
+          Esqueceu a sua senha?
+        </Link>
+
+        <p className="linkRegister">
+          Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default Login; 
