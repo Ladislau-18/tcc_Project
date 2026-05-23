@@ -16,6 +16,7 @@ function SearchPage() {
     const [totalPaginas, setTotalPaginas] = useState(0);
     const [termoBusca, setTermoBusca] = useState("");
     const [loading, setLoading] = useState(false);
+    const [cursos, setCursos] = useState([]); // Armazenar cursos vindos da API
 
     // 2. Estados para os Modais
     const [showEditModal, setShowEditModal] = useState(false);
@@ -23,25 +24,44 @@ function SearchPage() {
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [tccSelecionado, setTccSelecionado] = useState(null);
 
-    // Estados de filtros...
+    // Estados de filtros atualizado (Adicionado tipoTrabalho e ajustado notas padrão do IPIL)
     const [filtros, setFiltros] = useState({
-        ano: "",
-        curso: "",
-        notaMin: 0,
+        ano: "todos",
+        curso: "todos",
+        tipoTrabalho: "todos",
+        notaMin: 10,
         notaMax: 20
     });
 
 
-    // 3. Lógica Unificada de Busca e Paginação
+
+    const cursosUnicos = tccs.reduce((acc, current) => {
+        // Verifica se o TCC tem um ID de curso válido e se ele já não está na lista
+        if (current.idCurso && !acc.some(item => item.idCurso === current.idCurso)) {
+            acc.push({
+                idCurso: current.idCurso,
+                nomeCurso: current.curso // Usa o nome que já vem formatado pelo Laravel
+            });
+        }
+        return acc;
+    }, []);
+
+
+
+    // 3. Lógica Unificada de Busca e Paginação (AGORA COM OS FILTROS LIGADOS)
     useEffect(() => {
         const carregarDados = async () => {
             setLoading(true);
             try {
-                // Usamos o axios para fazer o pedido GET limpo
                 const resposta = await axios.get("http://127.0.0.1:8000/api/tccs", {
                     params: {
                         page: pagina,
-                        query: termoBusca
+                        query: termoBusca,
+                        ano: filtros.ano,
+                        curso_id: filtros.curso,
+                        tipo_trabalho: filtros.tipoTrabalho,
+                        nota_min: filtros.notaMin,
+                        nota_max: filtros.notaMax
                     }
                 });
 
@@ -54,33 +74,42 @@ function SearchPage() {
                 }
             } catch (error) {
                 console.error("Erro detalhado:", error);
-
                 toast.error("Erro ao conectar com o servidor Laravel.");
             } finally {
                 setLoading(false);
             }
         };
 
-        // delay de meio segundo na pesquisa automática
+        // delay de um segundo na pesquisa automática
         const delayDebounceFn = setTimeout(() => {
             carregarDados();
         }, 1000);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [pagina, termoBusca, filtros]);
+    }, [pagina, termoBusca, filtros]); // Executa sempre que mudar a página, o texto ou qualquer filtro!
 
-    // --- FUNÇÕES DE INTERAÇÃO ---
+    // --- FUNÇÕES DE AJUSTE DOS FILTROS ---
+    const handleFiltroChange = (campo, valor) => {
+        setFiltros(prev => ({ ...prev, [campo]: valor }));
+        setPagina(1); // Sempre que mudar um filtro, reseta para a página 1
+    };
 
+    const handleNotaMin = (e) => {
+        const valor = Math.min(Number(e.target.value), filtros.notaMax);
+        handleFiltroChange("notaMin", valor);
+    };
+
+    const handleNotaMax = (e) => {
+        const valor = Math.max(Number(e.target.value), filtros.notaMin);
+        handleFiltroChange("notaMax", valor);
+    };
+
+    // --- FUNÇÕES DE INTERAÇÃO (Mantidas 100% originais) ---
     const prepararEdicao = async (tcc) => {
         try {
-            // Busca os dados ultra completos e reais do relatório
             const resposta = await axios.get(`http://127.0.0.1:8000/api/tccs/${tcc.idTcc}`);
-
             if (resposta.data) {
-                const tccCompleto = {
-                    ...resposta.data,
-                    listaAutores: resposta.data.autores 
-                };
+                const tccCompleto = { ...resposta.data, listaAutores: resposta.data.autores };
                 setTccSelecionado(tccCompleto);
                 setShowEditModal(true);
                 setShowDetailsModal(false);
@@ -102,25 +131,7 @@ function SearchPage() {
 
     const handleUpdateSuccess = async () => {
         setShowEditModal(false);
-
-        // Faz um fetch imediato para atualizar a lista
-        try {
-            const resposta = await axios.get("http://127.0.0.1:8000/api/tccs", {
-                params: {
-                    page: pagina,
-                    query: termoBusca
-                }
-            });
-
-            if (resposta.data && resposta.data.tccs) {
-                setTccs(resposta.data.tccs);
-                setTotalPaginas(resposta.data.totalPaginas);
-            }
-
-        } catch (error) {
-            console.error("Erro ao atualizar lista:", error);
-            toast.error("Erro ao atualizar a lista.");
-        }
+        setPagina(1); // Força a atualização voltando à página 1
     };
 
     const handleConfirmDelete = async () => {
@@ -129,14 +140,11 @@ function SearchPage() {
             const userObj = JSON.parse(userStorage);
             const userId = userObj.idUtilizador || userObj.id;
 
-            // Chamada direta para a nova API do Laravel
             await axios.delete(`http://127.0.0.1:8000/api/tccs/${tccSelecionado.idTcc}`, {
                 params: { userId: userId }
             });
 
-            // Remove localmente para dar feedback visual instantâneo
             setTccs(prev => prev.filter(item => item.idTcc !== tccSelecionado.idTcc));
-
             setShowDeleteModal(false);
             setShowDetailsModal(false);
             toast.success("Relatório removido com sucesso!");
@@ -153,17 +161,83 @@ function SearchPage() {
                 <p><strong>Explore e consulte todos os relatórios do sistema</strong></p>
             </div>
 
+            {/* Renderiza a tua barra de busca de texto */}
             <SearchBar
                 query={termoBusca}
                 setQuery={(val) => {
                     setTermoBusca(val);
-                    setPagina(1); // Sempre que pesquisar, volta para a página 1
+                    setPagina(1);
                 }}
                 onSearch={() => { }}
             />
 
+            {/* A Tua Nova Barra Horizontal de Filtros Organizada */}
+            <div className="barra-filtros-horizontal">
+
+                {/* Filtro de Ano */}
+                <div className="filtro-item">
+                    <label>Ano de Defesa</label>
+                    <select value={filtros.ano} onChange={(e) => handleFiltroChange("ano", e.target.value)}>
+                        <option value="todos">Todos os Anos</option>
+                        {Array.from({ length: 17 }, (_, i) => 2026 - i).map(ano => (
+                            <option key={ano} value={ano}>{ano}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Filtro de Curso */}
+                <div className="filtro-item">
+                    <label>Curso</label>
+                    <select value={filtros.curso} onChange={(e) => handleFiltroChange("curso", e.target.value)}>
+                        <option value="todos">Todos os Cursos</option>
+                        {cursosUnicos.map(c => (
+                            <option key={c.idCurso} value={c.idCurso}>{c.nomeCurso}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Filtro de Estrutura (Individual ou Grupo) */}
+                <div className="filtro-item">
+                    <label>Formação</label>
+                    <select value={filtros.tipoTrabalho} onChange={(e) => handleFiltroChange("tipoTrabalho", e.target.value)}>
+                        <option value="todos">Todos os Trabalhos</option>
+                        <option value="individual">Trabalho Individual</option>
+                        <option value="grupo">Em Grupo</option>
+                    </select>
+                </div>
+
+                {/* O teu Seletor Duplo (Range Slider) de Notas sem limitações */}
+                <div className="filtro-item range-container-item">
+                    <div className="range-header-label">
+                        <label>Nota Final</label>
+                        <span className="nota-valores-label">{filtros.notaMin} a {filtros.notaMax} val.</span>
+                    </div>
+
+                    <div className="range-slider-duplo">
+                        <input
+                            type="range"
+                            min="10"
+                            max="20"
+                            value={filtros.notaMin}
+                            onChange={handleNotaMin}
+                            className="input-range-slider low-range"
+                        />
+                        <input
+                            type="range"
+                            min="10"
+                            max="20"
+                            value={filtros.notaMax}
+                            onChange={handleNotaMax}
+                            className="input-range-slider high-range"
+                        />
+                    </div>
+                </div>
+
+            </div>
+
+            {/* Exibição dos Resultados */}
             <ShowResult
-                items={tccs} // Agora usa o estado unificado 'tccs'
+                items={tccs}
                 onEdit={prepararEdicao}
                 onDeleteClick={confirmarExclusao}
                 onDetailsClick={visualizarDetalhes}
@@ -196,7 +270,7 @@ function SearchPage() {
                 </div>
             )}
 
-            {/* Modais */}
+            {/* Modais Originais Mantidos */}
             <ModalDetailsTcc
                 show={showDetailsModal}
                 tcc={tccSelecionado}

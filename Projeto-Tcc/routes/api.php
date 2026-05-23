@@ -19,13 +19,19 @@ Route::get('/dashboard/stats', [DashboardController::class, 'getStats']);
 Route::get('/dashboard/graphs', [DashboardController::class, 'getGraphData']);
 Route::get('/dashboard/history', [DashboardController::class, 'getHistory']);
 
+// Curso
+Route::get('/cursos', [CursoController::class, 'index']);
+Route::post('/cursos', [CursoController::class, 'store']);
+Route::get('/cursos/{id}', [CursoController::class, 'show']);
+Route::put('/cursos/{id}', [CursoController::class, 'update']);
+Route::delete('/cursos/{id}', [CursoController::class, 'delete']);
 
 // Registo
 Route::get('/tccs/form-data', [TccController::class, 'getFormData']);
 Route::post('/tccs', [TccController::class, 'store']);
 
 
-//Presquisa, ver, editar e apagar relatorios
+//Presquisa, ver, editar e apagar 
 Route::get('/tccs', [TccController::class, 'index']);
 Route::delete('/tccs/{id}', [TccController::class, 'delete']);
 Route::get('/tccs/{id}', [TccController::class, 'show']);

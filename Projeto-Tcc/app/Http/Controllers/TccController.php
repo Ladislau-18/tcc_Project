@@ -100,21 +100,58 @@ class TccController extends Controller
     public function index(Request $request)
     {
         try {
+            // 1. Pegamos nos dados que vêm da URL (Barra de pesquisa e filtros)
             $busca = $request->query('query');
+            $ano = $request->query('ano');
+            $cursoId = $request->query('curso_id');
+            $tipoTrabalho = $request->query('tipo_trabalho');
+            $notaMin = $request->query('nota_min');
+            $notaMax = $request->query('nota_max');
 
+            // 2. Iniciamos a Query com as relações que já tinhas mapeado
             $query = Tcc::with(['curso.areaFormacao', 'autores', 'local']);
 
+            // FILTRO 1: Barra de Pesquisa por texto (O teu código original intacto)
             if (!empty($busca)) {
                 $query->where(function ($q) use ($busca) {
                     $q->where('titulo', 'LIKE', "%{$busca}%")
-                    ->orWhereHas('autores', function ($a) use ($busca) {
-                        $a->where('nome', 'LIKE', "%{$busca}%");
-                    });
+                      ->orWhereHas('autores', function ($a) use ($busca) {
+                          $a->where('nome', 'LIKE', "%{$busca}%");
+                      });
                 });
             }
 
+            // FILTRO 2: Ano de Defesa
+            if (!empty($ano) && $ano !== 'todos') {
+                $query->where('anoDefesa', $ano);
+            }
+
+            // FILTRO 3: Curso
+            if (!empty($cursoId) && $cursoId !== 'todos') {
+                $query->where('idCurso', $cursoId);
+            }
+
+            // FILTRO 4: Intervalo de Notas (O teu Range Slider!)
+            // Se o React enviar as notas, filtramos. Caso contrário, ele ignora.
+            if (!empty($notaMin) && !empty($notaMax)) {
+                $query->whereBetween('notaFinal', [(int)$notaMin, (int)$notaMax]);
+            }
+
+            // FILTRO 5: Trabalho Individual ou em Grupo
+            if (!empty($tipoTrabalho) && $tipoTrabalho !== 'todos') {
+                if ($tipoTrabalho === 'individual') {
+                    // Tem apenas 1 autor associado
+                    $query->has('autores', '=', 1);
+                } elseif ($tipoTrabalho === 'grupo') {
+                    // Tem mais do que 1 autor associado
+                    $query->has('autores', '>', 1);
+                }
+            }
+
+            // 3. Paginação (Mantive os 10 que tinhas configurado)
             $tccsPaginados = $query->orderBy('anoDefesa', 'desc')->paginate(10);
 
+            // 4. Formatação dos dados para o teu React (O teu código original)
             $tccsFormatados = collect($tccsPaginados->items())->map(function ($tcc) {
                 $stringAutores = $tcc->autores->isNotEmpty() 
                     ? $tcc->autores->pluck('nome')->implode(', ') 
@@ -139,6 +176,7 @@ class TccController extends Controller
                 ];
             });
 
+            // 5. Retorno do JSON para o React (O teu padrão)
             return response()->json([
                 "tccs" => $tccsFormatados,
                 "totalPaginas" => $tccsPaginados->lastPage(),

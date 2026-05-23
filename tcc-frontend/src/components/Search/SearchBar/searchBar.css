@@ -34,3 +34,150 @@ Here only modified the imputSearch's broder-radio
 
 
 
+
+.barra-filtros-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 20px;
+    background-color: #ffffff; /* Cor de fundo limpa */
+    padding: 16px 24px;
+    border-radius: 10px;
+    margin: 0 auto 25px auto;
+    border: 1px solid #e3e6f0; /* Casamento perfeito com as bordas dos teus modais/cards */
+    max-width: 100%; /* Garante que respeita as margens do teu container global */
+    box-sizing: border-box;
+}
+
+/* Itens individuais da barra (Ano, Curso, Formação, Notas) */
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1; /* Faz com que todos os selects tenham a mesma largura proporcional */
+}
+
+.filtro-item label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4e73df; /* Tom de azul padrão para dar destaque */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filtro-item select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d3e2;
+    border-radius: 6px;
+    background-color: #f8f9fc;
+    color: #6e707e;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.filtro-item select:focus {
+    border-color: #4e73df;
+    background-color: #ffffff;
+}
+
+/* ==========================================================================
+   ESTILIZAÇÃO DO RANGE SLIDER DUPLO DE NOTAS (SEM LIMITAÇÕES)
+   ========================================================================== */
+
+/* Container do Item */
+.range-container-item {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Alinha a palavra "Nota Final" à esquerda e os "valores" à direita no topo */
+.range-header-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px; /* Dá o mesmo espaço que os outros labels */
+}
+
+.range-header-label label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4e73df;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.nota-valores-label {
+    color: #fd7e14; /* Mudei para a cor laranja do teu tema para casar com os botões! */
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* A caixa onde as duas barras se cruzam */
+.range-slider-duplo {
+    position: relative;
+    height: 40px; /* Bate certinho com a altura dos teus selects */
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fc;
+    border: 1px solid #d1d3e2;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* Os inputs ficam escondidos milimetricamente dentro da caixa */
+.input-range-slider {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    width: calc(100% - 16px);
+    pointer-events: none;
+    appearance: none;
+    background: none;
+    outline: none;
+    margin: 0;
+}
+
+/* Bolinha estilizada cor de laranja para combinar com o teu botão "Ver detalhes" */
+.input-range-slider::-webkit-slider-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #fd7e14; 
+    cursor: pointer;
+    pointer-events: auto;
+    appearance: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.input-range-slider::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #fd7e14;
+    cursor: pointer;
+    pointer-events: auto;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   CONFIGURAÇÃO RESPONSIVA (MOBILE FIRST / ADAPTAÇÃO)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .barra-filtros-horizontal {
+        flex-direction: column; /* Transforma a linha horizontal em lista vertical */
+        align-items: stretch;
+        gap: 16px;
+        padding: 20px;
+    }
+
+    .range-container-item {
+        flex: none; /* Reseta a proporção no telemóvel */
+    }
+}
