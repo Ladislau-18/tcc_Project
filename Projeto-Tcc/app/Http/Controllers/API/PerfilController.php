@@ -46,7 +46,7 @@ class PerfilController extends Controller
 
         return response()->json([
             'sucesso' => true,
-            'mensagem' => 'Perfil atualizado com sucesso!',
+            'mensagem' => 'Dados atualizados com sucesso!',
             'dados' => $user
         ], 200);
     }

@@ -38,6 +38,22 @@ class TccController extends Controller
         DB::beginTransaction();
 
         try {
+            // Validar se os autores já estão vinculados a outro TCC
+            if ($request->has('autores')) {
+                foreach ($request->autores as $nomeAutor) {
+                    if (!empty($nomeAutor)) {
+                        $aluno = Aluno::where('nome', $nomeAutor)->first();
+                        if ($aluno && $aluno->tccs()->exists()) {
+                            DB::rollBack();
+                            return response()->json([
+                                "status" => "error",
+                                "erro" => "O aluno '{$nomeAutor}' já está vinculado a um TCC."
+                            ], 422);
+                        }
+                    }
+                }
+            }
+
             // Criar o registo na tabela locaisarmazenamento
             $local = LocalArmazenamento::create([
                 'blocoArquivo'  => $request->andar,
@@ -54,16 +70,15 @@ class TccController extends Controller
                 'statusAprovacao' => $request->statusAprovacao,
                 'notaFinal'       => $request->notaFinal,
                 'idCurso'         => $request->idCurso,
-                'idLocal'         => $local->idLocal, 
-                'dataHora'        => now(), 
+                'idLocal'         => $local->idLocal,
+                'dataHora'        => now(),
             ]);
 
             // associar os autores (tcc_autores)
             if ($request->has('autores')) {
                 foreach ($request->autores as $nomeAutor) {
                     if (!empty($nomeAutor)) {
-                        
-                        $aluno = Aluno::create(['nome' => $nomeAutor]);
+                        $aluno = Aluno::firstOrCreate(['nome' => $nomeAutor]);
                         $tcc->autores()->attach($aluno->idAluno);
                     }
                 }
@@ -266,35 +281,84 @@ class TccController extends Controller
     {
         try {
             return DB::transaction(function () use ($request, $id) {
+                $tcc = Tcc::with('autores', 'local')->find($id);
+
+                if (!$tcc) {
+                    return response()->json(['erro' => 'Relatório não encontrado'], 404);
+                }
+
+                // Recuperar dados atuais
+                $autoresAtuais = $tcc->autores->pluck('nome')->toArray();
+                $autoresNovos = $request->input('autores', []);
+                $autoresNovos = array_filter($autoresNovos, fn($a) => !empty(trim($a)));
+
+                // Validar se os autores já estão vinculados a outro TCC (exceto o TCC atual)
+                foreach ($autoresNovos as $nomeAutor) {
+                    $aluno = Aluno::where('nome', $nomeAutor)->first();
+                    if ($aluno) {
+                        $outroTcc = $aluno->tccs()->where('tccs.idTcc', '!=', $id)->exists();
+                        if ($outroTcc) {
+                            return response()->json([
+                                "status" => "error",
+                                "erro" => "O aluno '{$nomeAutor}' já está vinculado a outro TCC."
+                            ], 422);
+                        }
+                    }
+                }
+
+                // Verificar se houve mudanças nos dados
+                $mudouTcc = $tcc->titulo !== $request->input('titulo') ||
+                            $tcc->orientadorNome !== $request->input('orientadorNome') ||
+                            $tcc->anoDefesa != $request->input('anoDefesa') ||
+                            $tcc->notaFinal != $request->input('notaFinal') ||
+                            $tcc->idCurso != $request->input('idCurso');
+
+                $mudouLocal = $tcc->local &&
+                            ($tcc->local->blocoArquivo !== $request->input('blocoArquivo') ||
+                             $tcc->local->estante !== $request->input('estante') ||
+                             $tcc->local->compartimento !== $request->input('compartimento') ||
+                             $tcc->local->prateleira !== $request->input('prateleira'));
+
+                $mudouAutores = count($autoresAtuais) !== count($autoresNovos) ||
+                               array_diff($autoresAtuais, $autoresNovos) ||
+                               array_diff($autoresNovos, $autoresAtuais);
+
+                // Se não houve mudanças, retornar mensagem especial
+                if (!$mudouTcc && !$mudouLocal && !$mudouAutores) {
+                    return response()->json([
+                        'message' => 'Nenhuma alteração foi feita.'
+                    ], 200);
+                }
 
                 // 1. Atualizar a tabela TCCs
-                $affectedRows = DB::table('tccs')->where('idTcc', $id)->update([
-                    'titulo'         => $request->input('titulo'),
-                    'orientadorNome' => $request->input('orientadorNome'),
-                    'anoDefesa'      => $request->input('anoDefesa'),
-                    'notaFinal'      => $request->input('notaFinal'),
-                    'idCurso'        => $request->input('idCurso'),
-                ]);
-
-                // 2. Atualizar a tabela Locais de Armazenamento
-                $idLocal = $request->input('idLocal');
-                if ($idLocal) {
-                    DB::table('locaisarmazenamento')->where('idLocal', $idLocal)->update([
-                        'blocoArquivo'  => $request->input('blocoArquivo'),
-                        'estante'       => $request->input('estante'),
-                        'compartimento' => $request->input('compartimento'),
-                        'prateleira'    => $request->input('prateleira'),
+                if ($mudouTcc) {
+                    DB::table('tccs')->where('idTcc', $id)->update([
+                        'titulo'         => $request->input('titulo'),
+                        'orientadorNome' => $request->input('orientadorNome'),
+                        'anoDefesa'      => $request->input('anoDefesa'),
+                        'notaFinal'      => $request->input('notaFinal'),
+                        'idCurso'        => $request->input('idCurso'),
                     ]);
                 }
 
+                // 2. Atualizar a tabela Locais de Armazenamento
+                if ($mudouLocal) {
+                    $idLocal = $request->input('idLocal');
+                    if ($idLocal) {
+                        DB::table('locaisarmazenamento')->where('idLocal', $idLocal)->update([
+                            'blocoArquivo'  => $request->input('blocoArquivo'),
+                            'estante'       => $request->input('estante'),
+                            'compartimento' => $request->input('compartimento'),
+                            'prateleira'    => $request->input('prateleira'),
+                        ]);
+                    }
+                }
+
                 // 3. Atualizar os autores
-                $autores = $request->input('autores', []);
-                if (!empty($autores)) {
-                    // Remove os autores antigos
+                if ($mudouAutores) {
                     DB::table('tcc_autores')->where('idTcc', $id)->delete();
 
-                    // Adiciona os novos autores
-                    foreach ($autores as $nomeAutor) {
+                    foreach ($autoresNovos as $nomeAutor) {
                         if (!empty(trim($nomeAutor))) {
                             $aluno = Aluno::firstOrCreate(['nome' => $nomeAutor]);
                             DB::table('tcc_autores')->insert([
@@ -305,9 +369,8 @@ class TccController extends Controller
                     }
                 }
 
-                // 4. Registar no histórico de movimentação
+                // 4. Registar no histórico de movimentação (só se houve mudanças)
                 $userId = $request->input('userId') ?? auth()->id() ?? 1;
-                $tcc = Tcc::find($id);
                 DB::table('historicomovimentacao')->insert([
                     'idUtilizador' => $userId,
                     'dataAcao' => now(),

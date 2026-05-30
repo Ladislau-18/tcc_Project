@@ -34,11 +34,18 @@ const ProfileModal = ({ mode, setMode, currentUser, refreshUser }) => {
         setErro("");
 
         try {
+            const token = sessionStorage.getItem('token');
+
             // Rota PUT conectada ao Laravel
-            const response = await axios.put("/api/perfil/atualizar", {
+            const response = await axios.put("http://127.0.0.1:8000/api/perfil", {
                 nome: formData.nome,
                 email: formData.email,
                 senha: formData.senha || null
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
 
             if (response.data.sucesso) {
