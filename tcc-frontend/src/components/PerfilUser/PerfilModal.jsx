@@ -34,32 +34,40 @@ const ProfileModal = ({ mode, setMode, currentUser, refreshUser }) => {
         setErro("");
 
         try {
-            const token = sessionStorage.getItem('token');
+            // Recupera o token que o AuthController gerou e guardou no sessionStorage
+            const token = sessionStorage.getItem("token");
 
-            // Rota PUT conectada ao Laravel
-            const response = await axios.put("http://127.0.0.1:8000/api/perfil", {
-                nome: formData.nome,
-                email: formData.email,
-                senha: formData.senha || null
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+            // Rota PUT conectada ao Laravel passando o Bearer Token no cabeçalho
+            const response = await axios.put(
+                "/api/perfil/atualizar",
+                {
+                    nome: formData.nome,
+                    email: formData.email,
+                    senha: formData.senha || null
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}` // Informa ao Sanctum quem está a fazer a alteração
+                    }
                 }
-            });
+            );
 
             if (response.data.sucesso) {
-                // Atualiza o SessionStorage e o estado do Header
+                // Atualiza o SessionStorage e o estado do Header com o padrão 'name'
                 refreshUser({
-                    ...currentUser,
-                    name: response.data.dados.nome,
-                    email: response.data.dados.email
+                    idUtilizador: response.data.dados.idUtilizador,
+                    name: response.data.dados.name,
+                    email: response.data.dados.email,
+                    numProcesso: response.data.dados.numProcesso
                 });
-                setMode("closed"); // Concluiu com sucesso, fecha e volta ao sistema
+                setMode("closed"); // Fecha o modal com sucesso
             }
         } catch (err) {
-            setErro(err.response?.data?.mensagem || "Erro ao atualizar os dados.");
+            // Captura o erro real vindo do Laravel
+            setErro(err.response?.data?.error || err.response?.data?.mensagem || "Erro ao atualizar os dados.");
         } finally {
+            // Força a limpeza do campo de senha por segurança
+            setFormData(prev => ({ ...prev, senha: "" }));
             setLoading(false);
         }
     };
@@ -67,7 +75,7 @@ const ProfileModal = ({ mode, setMode, currentUser, refreshUser }) => {
     return (
         <div className="modalOverlay">
             <div className="modalContent">
-                
+
                 {/* CABEÇALHO DO MODAL */}
                 <div className="modalHeader">
                     <h3>{mode === "view" ? "Meu Perfil" : "Editar Dados do Perfil"}</h3>
@@ -78,7 +86,7 @@ const ProfileModal = ({ mode, setMode, currentUser, refreshUser }) => {
 
                 {/* CONTEÚDO DO PERFIL */}
                 <form onSubmit={handleSalvar} className="modalForm">
-                    
+
                     {/* Campo Fixo: Número de Processo corrigido com base na migration */}
                     <div className="inputGroup">
                         <label>Nº de Processo (IPIL):</label>
@@ -91,10 +99,10 @@ const ProfileModal = ({ mode, setMode, currentUser, refreshUser }) => {
                         {mode === "view" ? (
                             <p className="staticField">{formData.nome}</p>
                         ) : (
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 name="nome"
-                                value={formData.nome} 
+                                value={formData.nome}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -107,10 +115,10 @@ const ProfileModal = ({ mode, setMode, currentUser, refreshUser }) => {
                         {mode === "view" ? (
                             <p className="staticField">{formData.email}</p>
                         ) : (
-                            <input 
-                                type="email" 
+                            <input
+                                type="email"
                                 name="email"
-                                value={formData.email} 
+                                value={formData.email}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -121,10 +129,10 @@ const ProfileModal = ({ mode, setMode, currentUser, refreshUser }) => {
                     {mode === "edit" && (
                         <div className="inputGroup">
                             <label>Nova Senha (deixe em branco para manter a atual):</label>
-                            <input 
-                                type="password" 
+                            <input
+                                type="password"
                                 name="senha"
-                                value={formData.senha} 
+                                value={formData.senha}
                                 onChange={handleInputChange}
                                 placeholder="Mínimo 8 caracteres"
                             />
